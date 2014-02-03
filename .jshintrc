@@ -1,0 +1,11 @@
+{
+   "browser": true,
+   "strict": true,
+   "unused": true,
+   "undef": true,
+   "newcap": true,
+   "camelcase": true,
+   "curly": true,
+   "forin": true,
+   "indent": 4
+}

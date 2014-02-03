@@ -1,0 +1,13 @@
+{
+  "version": "0.1.0",
+  "main": "mailbuild",
+  "volo": {
+    "baseDir": "deps",
+    "dependencies": {
+      "mimetypes": "github:Kreata/mimetypes/master",
+      "addressparser": "github:Kreata/addressparser/master",
+      "mimefuncs": "github:Kreata/mimefuncs/master",
+      "punycode": "github:bestiejs/punycode.js/master"
+    }
+  }
+}

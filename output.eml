@@ -1,0 +1,23 @@
+Content-Type: multipart/mixed; boundary="abc\"de"
+
+--abc"de
+Content-Type: multipart/alternative; boundary=----mc-?=_1-1390999445163
+
+------mc-?=_1-1390999445163
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+
+Hello world!
+------mc-?=_1-1390999445163
+Content-Type: text/html
+Content-Transfer-Encoding: 7bit
+
+<p>Hello world!</p>
+------mc-?=_1-1390999445163--
+
+--abc"de
+Content-Type: image/png
+
+BINARY_DATA
+--abc"de--
+
