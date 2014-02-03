@@ -24,10 +24,10 @@
 
     if (typeof define === 'function' && define.amd) {
         define([
-            "./deps/mimefuncs",
-            "./deps/mimetypes/mimetypes",
-            "./deps/punycode",
-            "./deps/addressparser"
+            "./mimefuncs",
+            "./mimetypes/mimetypes",
+            "./punycode",
+            "./addressparser"
         ], factory);
     } else {
         root.mailbuild = factory(mimefuncs, mimetypes, punycode, addressparser);

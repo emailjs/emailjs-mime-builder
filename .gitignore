@@ -1,3 +1,8 @@
 node_modules
 .DS_Store
 deps
+
+mimetypes
+mimefuncs.js
+punycode.js
+addressparser.js
