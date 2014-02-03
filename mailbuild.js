@@ -36,15 +36,16 @@
 
     "use strict";
 
+    /**
+     *
+     */
     function MimeNode(contentType, options){
         this.nodeCounter = 0;
 
         options = options || {};
 
-        if(!options.rootNode){
-            this.baseBoundary = options.baseBoundary || Date.now(); // useful for unique-like boundaries
-            this.date = new Date();
-        }
+        this.baseBoundary = options.baseBoundary || Date.now(); // useful for unique-like boundaries
+        this.date = new Date();
 
         this.rootNode = options.rootNode || this;
         this.nodeId = ++this.rootNode.nodeCounter;
@@ -66,33 +67,61 @@
         }
     }
 
-    MimeNode.prototype.addChild = function(contentType, options){
-        var node,
-            nodeOptions = {
-                parentNode: this,
-                rootNode: this.rootNode
-            };
-
+    MimeNode.prototype.createChild = function(contentType, options){
         if(!options && typeof contentType == "object"){
             options = contentType;
             contentType = undefined;
         }
-
-        Object.keys(options || {}).forEach(function(key){
-            nodeOptions[key] = options[key];
-        });
-
-        node = new MimeNode(contentType, nodeOptions);
-
-        this.childNodes.push(node);
+        var node = new MimeNode(contentType, options);
+        this.appendChild(node);
         return node;
     };
 
-    MimeNode.prototype.removeChild = function(node){
-        for(var i = this.childNodes.length - 1; i >= 0; i--){
-            if(this.childNodes[i] == node){
-                this.childNodes.splice(i, 1);
-                return node;
+    MimeNode.prototype.appendChild = function(childNode){
+
+        if(childNode.rootNode != this.rootNode){
+            childNode.rootNode = this.rootNode;
+            childNode.nodeId = ++this.rootNode.nodeCounter;
+        }
+
+        childNode.parentNode = this;
+
+        this.childNodes.push(childNode);
+        return childNode;
+    };
+
+    MimeNode.prototype.replace = function(node){
+        if(node == this){
+            return this;
+        }
+
+        this.parentNode.childNodes.forEach((function(childNode, i){
+            if(childNode == this){
+
+                node.rootNode = this.rootNode;
+                node.parentNode = this.parentNode;
+                node.nodeId = this.nodeId;
+
+                this.rootNode = this;
+                this.parentNode = undefined;
+
+                node.parentNode.childNodes[i] = node;
+            }
+        }).bind(this));
+        return node;
+    };
+
+    MimeNode.prototype.remove = function(){
+        if(!this.parentNode){
+            return this;
+        }
+
+        for(var i = this.parentNode.childNodes.length - 1; i >= 0; i--){
+            if(this.parentNode.childNodes[i] == this){
+                this.parentNode.childNodes.splice(i, 1);
+                this.parentNode = undefined;
+                this.rootNode = this;
+                return this;
             }
         }
     };
@@ -108,9 +137,9 @@
             }
             // allow [{key:"content-type", value: "text/plain"}]
             else if(Array.isArray(key)){
-                key.forEach(function(i){
+                key.forEach((function(i){
                     this.setHeader(i.key, i.value);
-                });
+                }).bind(this));
             }
             // allow {'content-type': 'text/plain'}
             else{
@@ -146,6 +175,41 @@
         }
 
         return this;
+    };
+
+    MimeNode.prototype.addHeader = function(key, value){
+
+        // Allow setting multiple headers at once
+        if(!value && key && typeof key == "object"){
+            // allow {key:"content-type", value: "text/plain"}
+            if(key.key && key.value){
+                this.addHeader(key.key, key.value);
+            }
+            // allow [{key:"content-type", value: "text/plain"}]
+            else if(Array.isArray(key)){
+                key.forEach((function(i){
+                    this.addHeader(i.key, i.value);
+                }).bind(this));
+            }
+            // allow {'content-type': 'text/plain'}
+            else{
+                Object.keys(key).forEach((function(i){
+                    this.addHeader(i, key[i]);
+                }).bind(this));
+            }
+            return this;
+        }
+
+        key = this.normalizeHeaderKey(key);
+
+        var headerValue = {
+            key: this.normalizeHeaderKey(key),
+            value: this.normalizeHeaderValue(key, value)
+        };
+
+        this.headers.push(headerValue);
+        return this;
+
     };
 
     MimeNode.prototype.getHeader = function(key){
@@ -191,7 +255,7 @@
     MimeNode.prototype.buildHeaderValue = function(structured){
         var paramsArray = [];
 
-        Object.keys(structured.params).forEach((function(param){
+        Object.keys(structured.params || {}).forEach((function(param){
             paramsArray.push(param + "=" + this.escapeHeaderValue(structured.params[param]));
         }).bind(this));
 

@@ -14,26 +14,26 @@ require(["../mailbuild"], function(mailbuild) {
         subject: "PGP Signature Demo"
     });
 
-    var multipart = mail.addChild("multipart/mixed");
+    var multipart = mail.createChild("multipart/mixed");
 
-    var altNode = multipart.addChild("multipart/alternative");
+    var altNode = multipart.createChild("multipart/alternative");
 
-    multipart.addChild("image/png", {filename: "image.png"}).setContent("BINARY_DATA");
+    multipart.createChild("image/png", {filename: "image.png"}).setContent("BINARY_DATA");
 
     altNode.
-        addChild({filename: "test.txt"}).
+        createChild({filename: "test.txt"}).
         setContent("Bacon ipsum dolor sit amet pastrami hamburger beef ribs fatback. Beef ribs sausage ham, tail jerky flank rump capicola ham hock ball tip. Pancetta t-bone pig, kevin tongue salami short ribs shank sausage sirloin venison beef cow doner swine. Filet mignon shank ball tip, pig ham hock shankle jerky swine boudin porchetta frankfurter pastrami. Tenderloin chuck salami meatball.");
 
     altNode.
-        addChild("text/html").
+        createChild("text/html").
         setContent("<p>Hello world!</p>");
 
     altNode.
-        addChild("text/html").
-        setContent('<p lang="ru" xml:lang="ru" dir="ltr">\nНо пожжэ омйттам жкаывола ыюм, зыд ыёрмод аюдирэ чингюльищ нэ. Йн ыюм кашы волумюч, векж ты лебыр констятюам, зыд экз бландит янвыняры. Ат пырикульа пэржыкюти дуо, эрож адхюк доктюж экз нам, эож ку апэриам жплэндидэ модыратиюз. Магна торквюатоз эож ат. Пюрто зальютатуж но векж. Зймюл оффекйяж вэл ыт. Ад ыёюз интыллыгам вим, ты нам эуежмод нолюёжжэ, нам но дйкит корпора опортэат.\n  </p>');
+        createChild("text/html").
+        setContent('<p lang="ru" xml:lang="ru" dir="ltr">\nНо пожжэ омйттам жкаывола ыюм, зыд ыёрмод аюдирэ чингюльищ нэ.</p>');
 
     mail.
-        addChild("application/pgp-signature").
+        createChild("application/pgp-signature").
         setHeader("content-transfer-encoding", "7bit").
         setHeader("content-id", "abcd@ef").
         setContent(sign(multipart.build()));
