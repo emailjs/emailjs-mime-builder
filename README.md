@@ -293,7 +293,7 @@ Download `mailbuild` source and install dependencies
 
 ```bash
 git clone git@github.com:Kreata/mailbuild.git
-cd mimetypes
+cd mailbuild
 volo install
 ```
 
