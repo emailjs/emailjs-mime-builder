@@ -45,7 +45,7 @@ require(["../mailbuild"], function(mailbuild) {
         openpgp.config.prefer_hash_algorithm = openpgp.enums.hash.sha256;
         var privKey = openpgp.key.readArmored(pgp_keys.private_key).keys[0];
         privKey.getSigningKeyPacket().decrypt(pgp_keys.passphrase);
-        return "-----BEGIN PGP SIGNATURE-----" + 
+        return "-----BEGIN PGP SIGNATURE-----" +
             openpgp.signClearMessage([privKey], str).
                split("-----BEGIN PGP SIGNATURE-----").pop();
     }
