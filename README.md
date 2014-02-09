@@ -160,9 +160,6 @@ Where
 
 Method returns current node.
 
-> When setting address headers (`From`, `To`, `Cc`, `Bcc`) use of unicode is allowed. If needed
-> the addresses are converted to punycode automatically.
-
 **Example**
 
 ```javascript
@@ -319,6 +316,81 @@ Returns the following object:
     "from": "from@example.com",
     "to": ["receiver1@example.com", "receiver2@example.com"]
 }
+```
+
+## Notes
+
+### Addresses
+
+When setting address headers (`From`, `To`, `Cc`, `Bcc`) use of unicode is allowed. If needed
+the addresses are converted to punycode automatically.
+
+### Attachments
+
+For attachments you should minimally set `filename` option and `Content-Disposition` header. If filename is specified, you can leave content type blank - if content type is not set, it is detected from the filename.
+
+```javascript
+mailbuild("multipart/mixed").
+  createChild(false, {filename: "image.png"}).
+  setHeader("Content-Disposition", "attachment");
+```
+
+Obviously you might want to add `Content-Id` header as well if you want to reference this attachment from the HTML content.
+
+### MIME structure
+
+Most probably you only need to deal with the following multipart types when generating messages:
+
+  * **multipart/alternative** - includes the same content in different forms (usually text/plain + text/html)
+  * **multipart/related** - includes main node and related nodes (eg. text/html + referenced attachments)
+  * **multipart/mixed** - includes other multipart nodes and attachments, or single content node and attachments
+
+**Examples**
+
+One content node and an attachment
+
+```
+multipart/mixed
+  ↳ text/plain
+  ↳ image/png
+```
+
+Content node with referenced attachment (eg. image with `Content-Type` referenced by `cid:` url in the HTML)
+
+```
+multipart/related
+  ↳ text/html
+  ↳ image/png
+```
+
+Plaintext and HTML alternatives
+
+```
+multipart/alternative
+  ↳ text/html
+  ↳ text/plain
+```
+
+One content node with referenced attachment and a regular attachment
+
+```
+multipart/mixed
+  ↳ multipart/related
+    ↳ text/plain
+    ↳ image/png
+  ↳ application/x-zip
+```
+
+Alternative content with referenced attachment for HTML and a regular attachment
+
+```
+multipart/mixed
+  ↳ multipart/alternative
+    ↳ text/plain
+    ↳ multipart/related
+      ↳ text/html
+      ↳ image/png
+  ↳ application/x-zip
 ```
 
 ## Tests
