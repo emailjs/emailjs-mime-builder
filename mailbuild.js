@@ -357,7 +357,7 @@
                         transferEncoding = "quoted-printable";
                     }
                 }else{
-                    transferEncoding = "base64";
+                    transferEncoding = transferEncoding || "base64";
                 }
             }
             this.setHeader("Content-Transfer-Encoding", transferEncoding);
@@ -458,6 +458,31 @@
         return lines.join("\r\n");
     };
 
+    /**
+     * Generates and returns SMTP envelope with the sender address and a list of recipients addresses
+     *
+     * @return {Object} SMTP envelope in the form of {from: "from@example.com", to: ["to@example.com"]}
+     */
+    MimeNode.prototype.getEnvelope = function(){
+        var envelope = {
+                from: false,
+                to: []
+            };
+        this._headers.forEach((function(header){
+            var list = [];
+            if(header.key == "From" || (!envelope.from && ["Reply-To", "Sender"].indexOf(header.key) >=0)){
+                this._convertAddresses([].concat.apply([], [].concat(header.value).map(addressparser.parse)), list);
+                if(list.length && list[0]){
+                    envelope.from = list[0];
+                }
+            }else if(["To", "Cc", "Bcc"].indexOf(header.key) >= 0){
+                this._convertAddresses([].concat.apply([], [].concat(header.value).map(addressparser.parse)), envelope.to);
+            }
+        }).bind(this));
+
+        return envelope;
+    };
+
     /////// PRIVATE METHODS
 
     /**
@@ -501,7 +526,7 @@
      * @return {String} escaped and quoted (if needed) argument value
      */
     MimeNode.prototype._escapeHeaderArgument = function(value){
-        if(value.match(/[\s"\\';\/]|^\-/g)){
+        if(value.match(/[\s"\\';\/=]|^\-/g)){
             return '"' + value.replace(/(["\\])/g, "\\$1") + '"';
         }else{
             return value;
@@ -601,10 +626,13 @@
      * Rebuilds address object using punycode and other adjustments
      *
      * @param {Array} addresses An array of address objects
+     * @param {Array} [uniqueList] An array to be populated with addresses
      * @return {String} address string
      */
-    MimeNode.prototype._convertAddresses = function(addresses){
+    MimeNode.prototype._convertAddresses = function(addresses, uniqueList){
         var values = [];
+
+        uniqueList = uniqueList || [];
 
         addresses.forEach((function(address){
             if(address.address){
@@ -620,8 +648,12 @@
                     address.name = mimefuncs.mimeWordsEncode(address.name, "Q");
                     values.push('"' + address.name+'" <'+address.address+'>');
                 }
+
+                if(uniqueList.indexOf(address.address) < 0){
+                    uniqueList.push(address.address);
+                }
             }else if(address.group){
-                values.push(address.name + ":" + (address.group.length ? this._convertAddresses(address.group) : "").trim() + ";");
+                values.push(address.name + ":" + (address.group.length ? this._convertAddresses(address.group, uniqueList) : "").trim() + ";");
             }
         }).bind(this));
 

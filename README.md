@@ -93,12 +93,12 @@ multipart/mixed
 Replaces current node with another node
 
 ```javascript
-node.appendChild(replacementNode)
+node.replace(replacementNode)
 ```
 
 Where
 
-  * **replacementNode** - node to replace the current node
+  * **replacementNode** - node to replace the current node with
 
 Method returns replacement node.
 
@@ -285,6 +285,37 @@ Message-Id: <generated value>
 MIME-Version: 1.0
 
 Hello world!
+```
+
+## getEnvelope
+
+Generates a SMTP envelope object. Makes sense only for root node.
+
+```javascript
+var envelope = node.generateEnvelope()
+```
+
+Method returns the envelope in the form of `{from:'address', to: ['addresses']}`
+
+**Example**
+
+```javascript
+mailbuild().
+    addHeader({
+        from: "From <from@example.com>",
+        to: "receiver1@example.com",
+        cc: "receiver2@example.com"
+    }).
+    getEnvelope();
+```
+
+Returns the following object:
+
+```json
+{
+    "from": "from@example.com",
+    "to": ["receiver1@example.com", "receiver2@example.com"]
+}
 ```
 
 ## Tests

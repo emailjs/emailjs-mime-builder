@@ -1,4 +1,4 @@
-/* global mailbuild: false, test: false, ok: false, equal: false */
+/* global mailbuild: false, test: false, ok: false, equal: false, deepEqual: false */
 
 test("Create mailbuild object", function(){
     "use strict";
@@ -245,4 +245,105 @@ test("setContent (arraybuffer)", function(){
     msg = msg.join("\r\n\r\n");
 
     equal(msg, expected);
+});
+
+test("Get envelope", function(){
+    "use strict";
+
+    deepEqual(mailbuild().
+        addHeader({
+            from: "From <from@example.com>",
+            sender: "Sender <sender@example.com>",
+            to: "receiver1@example.com"
+        }).
+        addHeader({
+            to: "receiver2@example.com",
+            cc: "receiver1@example.com, receiver3@example.com",
+            bcc: "receiver4@example.com, Rec5 <receiver5@example.com>"
+        }).getEnvelope(), {
+            from: "from@example.com",
+            to: ["receiver1@example.com", "receiver2@example.com", "receiver3@example.com", "receiver4@example.com", "receiver5@example.com"]
+        });
+
+    deepEqual(mailbuild().
+        addHeader({
+            sender: "Sender <sender@example.com>",
+            to: "receiver1@example.com"
+        }).
+        addHeader({
+            to: "receiver2@example.com",
+            cc: "receiver1@example.com, receiver3@example.com",
+            bcc: "receiver4@example.com, Rec5 <receiver5@example.com>"
+        }).getEnvelope(), {
+            from: "sender@example.com",
+            to: ["receiver1@example.com", "receiver2@example.com", "receiver3@example.com", "receiver4@example.com", "receiver5@example.com"]
+        });
+});
+
+test("7bit text, kept as is", function(){
+    "use strict";
+
+    var msg = mailbuild("text/plain").
+        setContent("tere tere").
+        build();
+
+    ok(/\r\n\r\ntere tere$/.test(msg));
+    ok(/^Content-Type: text\/plain$/m.test(msg));
+    ok(/^Content-Transfer-Encoding: 7bit$/m.test(msg));
+});
+
+test("7bit text, flowed", function(){
+    "use strict";
+
+    var msg = mailbuild("text/plain").
+        setContent("tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere").
+        build();
+
+    ok(/^Content-Type: text\/plain; format=flowed$/m.test(msg));
+    ok(/^Content-Transfer-Encoding: 7bit$/m.test(msg));
+
+    msg = msg.split("\r\n\r\n");
+    msg.shift();
+    msg = msg.join("\r\n\r\n");
+
+    equal(msg, "tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere \r\ntere tere tere tere tere");
+});
+
+test("Unicode text, auto charset", function(){
+    "use strict";
+
+    var msg = mailbuild("text/plain").
+        setContent("jõgeva").
+        build();
+
+    ok(/\r\n\r\nj=C3=B5geva$/.test(msg));
+    ok(/^Content-Type: text\/plain; charset=utf-8$/m.test(msg));
+    ok(/^Content-Transfer-Encoding: quoted-printable$/m.test(msg));
+});
+
+test("Filename (plain)", function(){
+    "use strict";
+
+    var msg = mailbuild("text/plain", {filename: "jogeva.txt"}).
+        setContent("jogeva").
+        build();
+
+    ok(/\r\n\r\njogeva$/.test(msg));
+    ok(/^Content-Type: text\/plain; name=jogeva.txt$/m.test(msg));
+    ok(/^Content-Transfer-Encoding: 7bit$/m.test(msg));
+    ok(/^Content-Disposition: attachment; filename=jogeva.txt$/m.test(msg));
+});
+
+
+test("Filename (unicode)", function(){
+    "use strict";
+
+    var msg = mailbuild("text/plain", {filename: "jõgeva.txt"}).
+        setContent("jõgeva").
+        build();
+
+    ok(/\r\n\r\nj=C3=B5geva$/.test(msg));
+    ok(/^Content-Type: text\/plain; charset=utf-8; name="=\?UTF-8\?Q\?j=C3=B5geva.txt\?="$/m.test(msg));
+    ok(/^Content-Transfer-Encoding: quoted-printable$/m.test(msg));
+    ok(/^Content-Disposition: attachment; filename="=\?UTF-8\?Q\?j=C3=B5geva.txt\?="$/m.test(msg));
 });
