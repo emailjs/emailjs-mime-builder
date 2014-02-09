@@ -341,7 +341,7 @@ test("Unicode text, auto charset", function(){
 test("Filename (plain)", function(){
     "use strict";
 
-    var msg = mailbuild("text/plain", {filename: "jogeva.txt"}).
+    var msg = mailbuild("text/plain", {filename: "jogeva.txt"}).
         setContent("jogeva").
         build();
 
@@ -354,7 +354,7 @@ test("Filename (plain)", function(){
 test("Filename (unicode)", function(){
     "use strict";
 
-    var msg = mailbuild("text/plain", {filename: "jõgeva.txt"}).
+    var msg = mailbuild("text/plain", {filename: "jõgeva.txt"}).
         setContent("jõgeva").
         build();
 
@@ -363,6 +363,17 @@ test("Filename (unicode)", function(){
     ok(/^Content-Transfer-Encoding: quoted-printable$/m.test(msg));
     ok(/^Content-Disposition: attachment; filename="=\?UTF-8\?Q\?j=C3=B5geva.txt\?="$/m.test(msg));
 });
+
+test("Detect content type from filename", function(){
+    "use strict";
+
+    var msg = mailbuild(false, {filename: "jogeva.zip"}).
+        setContent("jogeva").
+        build();
+
+    ok(/^Content-Type: application\/zip; name=jogeva.zip$/m.test(msg));
+});
+
 
 test("Bcc missing from output, included in envelope", function(){
     "use strict";
