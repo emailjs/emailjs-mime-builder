@@ -334,7 +334,6 @@ test("Filename (plain)", function(){
     ok(/^Content-Disposition: attachment; filename=jogeva.txt$/m.test(msg));
 });
 
-
 test("Filename (unicode)", function(){
     "use strict";
 
@@ -346,4 +345,26 @@ test("Filename (unicode)", function(){
     ok(/^Content-Type: text\/plain; charset=utf-8; name="=\?UTF-8\?Q\?j=C3=B5geva.txt\?="$/m.test(msg));
     ok(/^Content-Transfer-Encoding: quoted-printable$/m.test(msg));
     ok(/^Content-Disposition: attachment; filename="=\?UTF-8\?Q\?j=C3=B5geva.txt\?="$/m.test(msg));
+});
+
+test("Bcc missing from output, included in envelope", function(){
+    "use strict";
+
+    var mb = mailbuild("text/plain").
+        setHeader({
+            from: "sender@example.com",
+            to: "receiver@example.com",
+            bcc: "bcc@example.com"
+        }),
+        msg = mb.build(),
+        envelope = mb.getEnvelope();
+
+    deepEqual(envelope, {
+        from: "sender@example.com",
+        to: ["receiver@example.com", "bcc@example.com"]
+    });
+
+    ok(/^From: sender@example.com$/m.test(msg));
+    ok(/^To: receiver@example.com$/m.test(msg));
+    ok(!/^Bcc:/m.test(msg));
 });

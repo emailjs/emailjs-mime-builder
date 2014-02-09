@@ -160,6 +160,9 @@ Where
 
 Method returns current node.
 
+> When setting address headers (`From`, `To`, `Cc`, `Bcc`) use of unicode is allowed. If needed
+> the addresses are converted to punycode automatically.
+
 **Example**
 
 ```javascript

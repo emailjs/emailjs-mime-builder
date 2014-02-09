@@ -402,6 +402,9 @@
 
                 value = this._buildHeaderValue(structured);
                 break;
+            case "Bcc":
+                // skip BCC values
+                return;
             }
 
             lines.push(mimefuncs.foldLines(key + ": " + this._encodeHeaderValue(key, value), 76));
