@@ -396,3 +396,14 @@ test("Bcc missing from output, included in envelope", function(){
     ok(/^To: receiver@example.com$/m.test(msg));
     ok(!/^Bcc:/m.test(msg));
 });
+
+test("Unicode subject", function(){
+    "use strict";
+
+    var msg = mailbuild("text/plain").
+        setHeader({
+            subject: "jõgeval istus kägu metsas"
+        }).build();
+
+    ok(/^Subject: =\?UTF-8\?Q\?j=C3=B5geval\?= istus =\?UTF-8\?Q\?k=C3=A4gu\?= metsas$/m.test(msg));
+});
