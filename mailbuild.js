@@ -391,6 +391,9 @@
                 if(flowed){
                     structured.params.format = "flowed";
                 }
+                if(String(structured.params.format).toLowerCase().trim() == "flowed"){
+                    flowed = true;
+                }
 
                 if(structured.value.match(/^text\//) && typeof this.content == "string" && /[\u0080-\uFFFF]/.test(this.content)){
                     structured.params.charset = "utf-8";

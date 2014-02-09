@@ -309,6 +309,23 @@ test("7bit text, flowed", function(){
     equal(msg, "tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere \r\ntere tere tere tere tere");
 });
 
+test("flowed space stuffing", function(){
+    "use strict";
+
+    var msg = mailbuild("text/plain; format=flowed").
+        setContent("tere\r\nFrom\r\n Hello\r\n> abc\r\nabc").
+        build();
+
+    ok(/^Content-Type: text\/plain; format=flowed$/m.test(msg));
+    ok(/^Content-Transfer-Encoding: 7bit$/m.test(msg));
+
+    msg = msg.split("\r\n\r\n");
+    msg.shift();
+    msg = msg.join("\r\n\r\n");
+
+    equal(msg, "tere\r\n From\r\n  Hello\r\n > abc\r\nabc");
+});
+
 test("Unicode text, auto charset", function(){
     "use strict";
 
