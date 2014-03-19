@@ -1,11 +1,39 @@
 {
-  "version": "0.1.0",
-  "volo": {
-    "dependencies": {
-      "mimetypes": "github:Kreata/mimetypes/master",
-      "addressparser": "github:Kreata/addressparser/master",
-      "mimefuncs": "github:Kreata/mimefuncs/master",
-      "punycode": "github:bestiejs/punycode.js/master"
-    }
-  }
+    "name": "mailbuild",
+    "version": "0.1.0",
+    "homepage": "https://github.com/whiteout-io/mailbuild",
+    "description": "mailbuild is a low level rfc2822 message composer. Define your own mime tree, no magic included.",
+    "author": "Andris Reinman <andris@kreata.ee>",
+    "keywords": [
+        "RFC2822",
+        "mime"
+    ],
+    "license": "MIT",
+    "scripts": {
+        "test": "grunt"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/whiteout-io/mailbuild.git"
+    },
+    "main": "src/mailbuild",
+    "dependencies": {},
+    "devDependencies": {
+        "chai": "~1.8.1",
+        "grunt": "~0.4.1",
+        "grunt-mocha-phantomjs": "~0.4.0",
+        "grunt-contrib-connect": "~0.6.0",
+        "grunt-contrib-jshint": "~0.8.0",
+        "grunt-mocha-test": "~0.8.1",
+        "mocha": "~1.16.2",
+        "phantomjs": "~1.9.7-1",
+        "requirejs": "~2.1.10",
+        "mimefuncs": "https://github.com/whiteout-io/mimefuncs/tarball/0.1.5",
+        "mimetypes": " https://github.com/whiteout-io/mimetypes/tarball/0.1.1",
+        "addressparser": "https://github.com/whiteout-io/addressparser/tarball/0.1.2",
+        "punycode": "~1.2.4",
+        "arraybuffer-slice": "~0.0.2",
+        "stringencoding": "https://github.com/whiteout-io/stringencoding/tarball/0.1.0"
+    },
+    "volo": {}
 }

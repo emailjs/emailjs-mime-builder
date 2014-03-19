@@ -1,0 +1,28 @@
+{
+    "name": "mailbuild",
+    "main": "src/mailbuild.js",
+    "version": "0.1.2",
+    "homepage": "https://github.com/whiteout-io/mailbuild",
+    "authors": [
+        "Andris Reinman <andris@kreata.ee>"
+    ],
+    "description": "Parse rfc2822 address fields",
+    "keywords": [
+        "RFC2822",
+        "mime",
+    ],
+    "license": "MIT",
+    "ignore": [
+        "node_modules",
+        "bower_components",
+        "example",
+        "test",
+        ".gitignore",
+        ".jshintrc",
+        ".travis.yml",
+        "Gruntfile.js",
+        "LICENSE",
+        "package.json",
+        "README.md"
+    ]
+}

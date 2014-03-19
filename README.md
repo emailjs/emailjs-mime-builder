@@ -2,17 +2,39 @@
 
 *mailbuild* is a low level rfc2822 message composer. Define your own mime tree, no magic included.
 
-## Usage
+## StringEncoding API
 
-### Volo
+This module requires `TextEncoder` and `TextDecoder` to exist as part of the StringEncoding API (see: [MDN](https://developer.mozilla.org/en-US/docs/WebAPI/Encoding_API) [whatwg.org](http://encoding.spec.whatwg.org/#api)). Firefox 19+ is basically the only browser that supports this at the time of writing, while [Chromium in canary, not stable](https://code.google.com/p/chromium/issues/detail?id=243354). Luckily, [there is a polyfill](https://github.com/whiteout-io/stringencoding)!
+
+Also, if you use phantomjs, you might need [this polyfill for ArrayBuffer #slice](https://github.com/ttaubert/node-arraybuffer-slice)
+
+## Installation
+
+### [volo](http://volojs.org/):
 
 Install with [volo](http://volojs.org/):
 
-```shell
-volo add Kreata/mailbuild/master
-```
+    volo add whiteout-io/mailbuild/0.1.0
 
-**NB!** Requires [encoding.js](http://code.google.com/p/stringencoding/source/browse/encoding.js) and [encoding-indexes.js](http://code.google.com/p/stringencoding/source/browse/encoding-indexes.js) from [stringencoding](http://code.google.com/p/stringencoding/) project to be present on the page. This is a polyfill for TextEncoder/TextDecoder, not needed in latest Firefox and hopefully soon in Chrome either.
+### [Bower](http://bower.io/):
+
+    bower install git@github.com:whiteout-io/mailbuild.git#0.1.0
+
+### [npm](https://www.npmjs.org/):
+
+    npm install https://github.com/whiteout-io/mailbuild/tarball/0.1.0
+
+### Dependencies
+
+This module has dependencies that will not automatically be fetched.
+
+* [mimefuncs](https://github.com/whiteout-io/mimefuncs/)
+* [mimetypes](https://github.com/whiteout-io/mimetypes/)
+* [addressparser](https://github.com/whiteout-io/addressparser/)
+* [punycode.js](https://github.com/bestiejs/punycode.js)
+
+* [stringencoding](https://github.com/whiteout-io/stringencoding) // every browser except ff
+* [arraybuffer-slice](https://github.com/ttaubert/node-arraybuffer-slice) // phantomjs
 
 ## API
 
@@ -393,14 +415,32 @@ multipart/mixed
   ↳ application/x-zip
 ```
 
-## Tests
+## Get your hands dirty
 
-Download `mailbuild` source and install dependencies
-
-```bash
-git clone git@github.com:Kreata/mailbuild.git
+```
+git clone git@github.com:whiteout-io/mailbuild.git
 cd mailbuild
-volo install
+npm install && npm test
+grunt dev
+go to http://localhost:12345/example/ to run the example
+go to http://localhost:12345/test/ to run the tests in your browser of choice
 ```
 
-Tests are handled by QUnit. Open [testrunner.html](tests/testrunner.html) to run the tests.
+## License
+
+    Copyright (c) 2013 Andris Reinman
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.

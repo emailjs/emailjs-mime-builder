@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <title>mailbuild</title>
-        <script src="pgp_keys.js"></script>
-        <script src="openpgp.min.js"></script>
-        <script src="encoding-indexes.js"></script>
-        <script src="encoding.js"></script>
-        <!-- data-main attribute tells require.js to load
-             scripts/main.js after require.js loads. -->
-        <script data-main="app" src="require.js"></script>
-    </head>
-    <body>
+<head><meta charset="utf-8"/></head>
 
-        <p>Output of <em>app.js:log(str)</em>, <a href="public.txt">public key</a></p>
-        <pre id="target" style="margin: 5px; padding: 10px; background: #FAFAFA;"></pre>
+<body>
+    <!-- polyfill for TextEncoder/TextDecoder -->
+    <script src="../node_modules/stringencoding/encoding-indexes.js"></script>
+    <script src="../node_modules/stringencoding/encoding.js"></script>
 
-    </body>
+    <script data-main="index.js" src="../node_modules/requirejs/require.js"></script>
+
+    <p>Output:</p><pre id="target" style="margin: 5px; padding: 10px; background: #FAFAFA;"></pre>
+</body>
 </html>

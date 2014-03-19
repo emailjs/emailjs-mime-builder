@@ -1,8 +1,3 @@
-node_modules
+node_modules/
+npm-debug.log
 .DS_Store
-deps
-
-mimetypes
-mimefuncs.js
-punycode.js
-addressparser.js
