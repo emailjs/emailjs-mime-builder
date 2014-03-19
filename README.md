@@ -2,6 +2,8 @@
 
 *mailbuild* is a low level rfc2822 message composer. Define your own mime tree, no magic included.
 
+[![Build Status](https://travis-ci.org/whiteout-io/mailbuild.png?branch=master)](https://travis-ci.org/whiteout-io/mailbuild)
+
 ## StringEncoding API
 
 This module requires `TextEncoder` and `TextDecoder` to exist as part of the StringEncoding API (see: [MDN](https://developer.mozilla.org/en-US/docs/WebAPI/Encoding_API) [whatwg.org](http://encoding.spec.whatwg.org/#api)). Firefox 19+ is basically the only browser that supports this at the time of writing, while [Chromium in canary, not stable](https://code.google.com/p/chromium/issues/detail?id=243354). Luckily, [there is a polyfill](https://github.com/whiteout-io/stringencoding)!
