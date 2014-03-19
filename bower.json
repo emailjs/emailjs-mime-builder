@@ -6,7 +6,7 @@
     "authors": [
         "Andris Reinman <andris@kreata.ee>"
     ],
-    "description": "Parse rfc2822 address fields",
+    "description": "mailbuild is a low level rfc2822 message composer. Define your own mime tree, no magic included.",
     "keywords": [
         "RFC2822",
         "mime",
