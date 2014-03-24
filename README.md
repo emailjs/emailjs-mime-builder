@@ -16,15 +16,15 @@ Also, if you use phantomjs, you might need [this polyfill for ArrayBuffer #slice
 
 Install with [volo](http://volojs.org/):
 
-    volo add whiteout-io/mailbuild/0.1.0
+    volo add whiteout-io/mailbuild/v0.1.0
 
 ### [Bower](http://bower.io/):
 
-    bower install git@github.com:whiteout-io/mailbuild.git#0.1.0
+    bower install git@github.com:whiteout-io/mailbuild.git#v0.1.0
 
 ### [npm](https://www.npmjs.org/):
 
-    npm install https://github.com/whiteout-io/mailbuild/tarball/0.1.0
+    npm install https://github.com/whiteout-io/mailbuild/tarball/v0.1.0
 
 ### Dependencies
 
@@ -439,10 +439,13 @@ go to http://localhost:12345/test/ to run the tests in your browser of choice
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
 
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.

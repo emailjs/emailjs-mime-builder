@@ -28,12 +28,12 @@
         "mocha": "~1.16.2",
         "phantomjs": "~1.9.7-1",
         "requirejs": "~2.1.10",
-        "mimefuncs": "https://github.com/whiteout-io/mimefuncs/tarball/0.1.5",
-        "mimetypes": " https://github.com/whiteout-io/mimetypes/tarball/0.1.1",
-        "addressparser": "https://github.com/whiteout-io/addressparser/tarball/0.1.2",
+        "mimefuncs": "https://github.com/whiteout-io/mimefuncs/tarball/v0.1.5",
+        "mimetypes": " https://github.com/whiteout-io/mimetypes/tarball/v0.1.1",
+        "addressparser": "https://github.com/whiteout-io/addressparser/tarball/v0.1.2",
         "punycode": "~1.2.4",
         "arraybuffer-slice": "~0.0.2",
-        "stringencoding": "https://github.com/whiteout-io/stringencoding/tarball/0.1.0"
+        "stringencoding": "https://github.com/whiteout-io/stringencoding/tarball/v0.1.0"
     },
     "volo": {}
 }
