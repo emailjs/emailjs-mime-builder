@@ -1,5 +1,10 @@
-define(['chai', 'mailbuild'], function(chai, mailbuild) {
-    'use strict';
+'use strict';
+
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
+
+define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
     var expect = chai.expect;
     chai.Assertion.includeStack = true;

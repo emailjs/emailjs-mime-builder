@@ -17,15 +17,32 @@ module.exports = function(grunt) {
                     base: '.',
                     keepalive: true
                 }
+            },
+            test: {
+                options: {
+                    port: 12346,
+                    base: '.'
+                }
+            }
+        },
+
+        mochaTest: {
+            all: {
+                options: {
+                    reporter: 'spec'
+                },
+                src: ['test/*-unit.js']
             }
         },
 
         mocha_phantomjs: {
             all: {
                 options: {
-                    reporter: 'spec'
-                },
-                src: ['test/index.html']
+                    reporter: 'spec',
+                    urls: [
+                        'http://localhost:12346/test/index.html'
+                    ]
+                }
             }
         }
     });
@@ -38,5 +55,5 @@ module.exports = function(grunt) {
 
     // Tasks
     grunt.registerTask('dev', ['connect:dev']);
-    grunt.registerTask('default', ['jshint', 'mocha_phantomjs']);
+    grunt.registerTask('default', ['jshint', 'mochaTest', 'connect:test', 'mocha_phantomjs']);
 };

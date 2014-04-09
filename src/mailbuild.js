@@ -23,6 +23,8 @@
 
     if (typeof define === 'function' && define.amd) {
         define(['mimefuncs', 'mimetypes', 'punycode', 'addressparser'], factory);
+    } else if (typeof exports === 'object') {
+        module.exports = factory(require('mimefuncs'), require('mimetypes'), require('punycode'), require('addressparser'));
     } else {
         root.mailbuild = factory(mimefuncs, mimetypes, punycode, addressparser);
     }
