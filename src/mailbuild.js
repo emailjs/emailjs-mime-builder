@@ -662,7 +662,5 @@
         return values.join(', ');
     };
 
-    return function(contentType, options) {
-        return new MimeNode(contentType, options);
-    };
+    return MimeNode;
 }));

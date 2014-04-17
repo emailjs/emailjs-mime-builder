@@ -4,19 +4,19 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
+define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
 
     var expect = chai.expect;
     chai.Assertion.includeStack = true;
 
     describe('mailbuild', function() {
         it('should create mailbuild object', function() {
-            expect(mailbuild()).to.exist;
+            expect(new Mailbuild()).to.exist;
         });
 
         describe('#createChild', function() {
             it('should create child', function() {
-                var mb = mailbuild('multipart/mixed');
+                var mb = new Mailbuild('multipart/mixed');
 
                 var child = mb.createChild('multipart/mixed');
                 expect(child.parentNode).to.equal(mb);
@@ -34,9 +34,9 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
         describe('#appendChild', function() {
             it('should append child node', function() {
-                var mb = mailbuild('multipart/mixed');
+                var mb = new Mailbuild('multipart/mixed');
 
-                var child = mailbuild('text/plain');
+                var child = new Mailbuild('text/plain');
                 mb.appendChild(child);
                 expect(child.parentNode).to.equal(mb);
                 expect(child.rootNode).to.equal(mb);
@@ -47,9 +47,9 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
         describe('#replace', function() {
             it('should replace node', function() {
-                var mb = mailbuild(),
+                var mb = new Mailbuild(),
                     child = mb.createChild('text/plain'),
-                    replacement = mailbuild('image/png');
+                    replacement = new Mailbuild('image/png');
 
                 child.replace(replacement);
 
@@ -60,7 +60,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
         describe('#remove', function() {
             it('should remove node', function() {
-                var mb = mailbuild(),
+                var mb = new Mailbuild(),
                     child = mb.createChild('text/plain');
 
                 child.remove();
@@ -71,7 +71,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
         describe('#setHeader', function() {
             it('should set header', function() {
-                var mb = mailbuild();
+                var mb = new Mailbuild();
 
                 mb.setHeader('key', 'value');
                 mb.setHeader('key', 'value1');
@@ -98,7 +98,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should not inclide bcc missing in output, but in envelope', function() {
-                var mb = mailbuild('text/plain').
+                var mb = new Mailbuild('text/plain').
                 setHeader({
                     from: 'sender@example.com',
                     to: 'receiver@example.com',
@@ -118,7 +118,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should have unicode subject', function() {
-                var msg = mailbuild('text/plain').
+                var msg = new Mailbuild('text/plain').
                 setHeader({
                     subject: 'jõgeval istus kägu metsas'
                 }).build();
@@ -129,7 +129,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
         describe('#addHeader', function() {
             it('should add header', function() {
-                var mb = mailbuild();
+                var mb = new Mailbuild();
 
                 mb.addHeader('key', 'value1');
                 mb.addHeader('key', 'value2');
@@ -158,7 +158,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
         describe('#_normalizeHeaderKey', function() {
             it('should normalize header key', function() {
-                var mb = mailbuild();
+                var mb = new Mailbuild();
 
                 expect(mb._normalizeHeaderKey('key')).to.equal('Key');
                 expect(mb._normalizeHeaderKey('mime-vERSION')).to.equal('MIME-Version');
@@ -168,7 +168,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
         describe('#_buildHeaderValue', function() {
             it('should build header value', function() {
-                var mb = mailbuild();
+                var mb = new Mailbuild();
 
                 expect(mb._buildHeaderValue({
                     value: 'test'
@@ -203,7 +203,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
 
         describe('#build', function() {
             it('should build root node', function() {
-                var mb = mailbuild('text/plain').
+                var mb = new Mailbuild('text/plain').
                 setHeader({
                     date: '12345',
                     'message-id': '67890'
@@ -221,7 +221,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
                 expect(mb.build()).to.equal(expected);
             });
             it('should build child node', function() {
-                var mb = mailbuild('multipart/mixed'),
+                var mb = new Mailbuild('multipart/mixed'),
                     childNode = mb.createChild('text/plain').
                     setContent('Hello world!'),
 
@@ -234,7 +234,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should build multipart node', function() {
-                var mb = mailbuild('multipart/mixed', {
+                var mb = new Mailbuild('multipart/mixed', {
                     baseBoundary: 'test'
                 }).
                 setHeader({
@@ -260,14 +260,14 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should build root with generated headers', function() {
-                var msg = mailbuild('text/plain').build();
+                var msg = new Mailbuild('text/plain').build();
 
                 expect(/^Date:\s/m.test(msg)).to.be.true;
                 expect(/^Message\-Id:\s</m.test(msg)).to.be.true;
                 expect(/^MIME-Version: 1.0$/m.test(msg)).to.be.true;
             });
             it('should set content transfer encoding with string', function() {
-                var msg = mailbuild('text/plain').
+                var msg = new Mailbuild('text/plain').
                 setHeader({
                     'Content-Transfer-Encoding': 'quoted-printable'
                 }).
@@ -286,7 +286,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
         });
         describe('#getEnvelope', function() {
             it('should get envelope', function() {
-                expect(mailbuild().addHeader({
+                expect(new Mailbuild().addHeader({
                     from: 'From <from@example.com>',
                     sender: 'Sender <sender@example.com>',
                     to: 'receiver1@example.com'
@@ -299,7 +299,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
                     to: ['receiver1@example.com', 'receiver2@example.com', 'receiver3@example.com', 'receiver4@example.com', 'receiver5@example.com']
                 });
 
-                expect(mailbuild().addHeader({
+                expect(new Mailbuild().addHeader({
                     sender: 'Sender <sender@example.com>',
                     to: 'receiver1@example.com'
                 }).addHeader({
@@ -316,7 +316,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
         describe('#setContent', function() {
             it('should setContent (arraybuffer)', function() {
                 var arr = new Uint8Array(256),
-                    msg = mailbuild('text/plain').
+                    msg = new Mailbuild('text/plain').
                     setHeader({
                         'Content-Transfer-Encoding': 'base64'
                     }).
@@ -339,7 +339,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
                 expect(msg).to.equal(expected);
             });
             it('should keep 7bit text as is', function() {
-                var msg = mailbuild('text/plain').
+                var msg = new Mailbuild('text/plain').
                 setContent('tere tere').
                 build();
 
@@ -349,7 +349,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should encode 7bit text', function() {
-                var msg = mailbuild('text/plain').
+                var msg = new Mailbuild('text/plain').
                 setContent('tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere').
                 build();
 
@@ -364,7 +364,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should stuff flowed space', function() {
-                var msg = mailbuild('text/plain; format=flowed').
+                var msg = new Mailbuild('text/plain; format=flowed').
                 setContent('tere\r\nFrom\r\n Hello\r\n> abc\r\nabc').
                 build();
 
@@ -379,7 +379,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should use auto charset in unicode text', function() {
-                var msg = mailbuild('text/plain').
+                var msg = new Mailbuild('text/plain').
                 setContent('jõgeva').
                 build();
 
@@ -389,7 +389,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should fetch ascii filename', function() {
-                var msg = mailbuild('text/plain', {
+                var msg = new Mailbuild('text/plain', {
                     filename: 'jogeva.txt'
                 }).
                 setContent('jogeva').
@@ -402,7 +402,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should set unicode filename', function() {
-                var msg = mailbuild('text/plain', {
+                var msg = new Mailbuild('text/plain', {
                     filename: 'jõgeva.txt'
                 }).
                 setContent('jõgeva').
@@ -415,7 +415,7 @@ define(['chai', '../src/mailbuild'], function(chai, mailbuild) {
             });
 
             it('should detect content type from filename', function() {
-                var msg = mailbuild(false, {
+                var msg = new Mailbuild(false, {
                     filename: 'jogeva.zip'
                 }).
                 setContent('jogeva').

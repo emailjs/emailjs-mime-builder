@@ -40,10 +40,10 @@ This module has dependencies that will not automatically be fetched.
 
 ## API
 
-Create a new `mailbuild` object with
+Create a new `Mailbuild` object with
 
 ```javascript
-var builder = mailbuild(contentType [, options]);
+var builder = new Mailbuild(contentType [, options]);
 ```
 
 Where
@@ -55,7 +55,7 @@ Where
 
 ## Methods
 
-The same methods apply to the root node created with `mailbuild()` and to any child nodes.
+The same methods apply to the root node created with `new Mailbuild()` and to any child nodes.
 
 ### createChild
 
@@ -65,12 +65,12 @@ Creates and appends a child node to the node object
 node.createChild(contentType, options)
 ```
 
-The same arguments apply as with `mailbuild()`. Created node object is returned.
+The same arguments apply as with `new Mailbuild()`. Created node object is returned.
 
 **Example**
 
 ```javascript
-mailbuild("multipart/mixed").
+new Mailbuild("multipart/mixed").
     createChild("multipart/related").
         createChild("text/plain");
 ```
@@ -100,8 +100,8 @@ Method returns appended child node.
 **Example**
 
 ```javascript
-var childNode = mailbuild("text/plain"),
-    rootNode = mailbuild("multipart/mixed");
+var childNode = new Mailbuild("text/plain"),
+    rootNode = new Mailbuild("multipart/mixed");
 rootnode.appendChild(childNode);
 ```
 
@@ -129,9 +129,9 @@ Method returns replacement node.
 **Example**
 
 ```javascript
-var rootNode = mailbuild("multipart/mixed"),
+var rootNode = new Mailbuild("multipart/mixed"),
     childNode = rootNode.createChild("text/plain");
-childNode.replace(mailbuild("text/html"));
+childNode.replace(new Mailbuild("text/html"));
 ```
 
 Generates the following mime tree:
@@ -155,7 +155,7 @@ Method returns removed node.
 
 ```javascript
 
-var rootNode = mailbuild("multipart/mixed"),
+var rootNode = new Mailbuild("multipart/mixed"),
     childNode = rootNode.createChild("text/plain");
 childNode.remove();
 ```
@@ -187,7 +187,7 @@ Method returns current node.
 **Example**
 
 ```javascript
-mailbuild("text/plain").
+new Mailbuild("text/plain").
     setHeader("content-disposition", "inline").
     setHeader({
         "content-transfer-encoding": "7bit"
@@ -228,7 +228,7 @@ Method returns current node.
 **Example**
 
 ```javascript
-mailbuild("text/plain").
+new Mailbuild("text/plain").
     addHeader("X-Spam", "1").
     setHeader({
         "x-spam": "2"
@@ -262,7 +262,7 @@ Where
 **Example**
 
 ```javascript
-mailbuild("text/plain").getHeader("content-type"); // text/plain
+new Mailbuild("text/plain").getHeader("content-type"); // text/plain
 ```
 
 ## setContent
@@ -281,7 +281,7 @@ Where
 **Example**
 
 ```javascript
-mailbuild("text/plain").setContent("Hello world!");
+new Mailbuild("text/plain").setContent("Hello world!");
 ```
 
 ## build
@@ -297,7 +297,7 @@ Method returns the rfc2822 message as a string
 **Example**
 
 ```javascript
-mailbuild("text/plain").setContent("Hello world!").build();
+new Mailbuild("text/plain").setContent("Hello world!").build();
 ```
 
 Returns the following string:
@@ -324,7 +324,7 @@ Method returns the envelope in the form of `{from:'address', to: ['addresses']}`
 **Example**
 
 ```javascript
-mailbuild().
+new Mailbuild().
     addHeader({
         from: "From <from@example.com>",
         to: "receiver1@example.com",
@@ -354,7 +354,7 @@ the addresses are converted to punycode automatically.
 For attachments you should minimally set `filename` option and `Content-Disposition` header. If filename is specified, you can leave content type blank - if content type is not set, it is detected from the filename.
 
 ```javascript
-mailbuild("multipart/mixed").
+new Mailbuild("multipart/mixed").
   createChild(false, {filename: "image.png"}).
   setHeader("Content-Disposition", "attachment");
 ```

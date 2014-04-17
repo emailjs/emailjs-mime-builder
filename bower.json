@@ -1,7 +1,7 @@
 {
     "name": "mailbuild",
     "main": "src/mailbuild.js",
-    "version": "0.1.2",
+    "version": "0.2.1",
     "homepage": "https://github.com/whiteout-io/mailbuild",
     "authors": [
         "Andris Reinman <andris@kreata.ee>"
