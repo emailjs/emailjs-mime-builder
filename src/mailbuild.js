@@ -473,12 +473,12 @@
         this._headers.forEach(function(header) {
             var list = [];
             if (header.key === 'From' || (!envelope.from && ['Reply-To', 'Sender'].indexOf(header.key) >= 0)) {
-                this._convertAddresses([].concat.apply([], [].concat(header.value).map(addressparser.parse)), list);
+                this._convertAddresses(this._parseAddresses(header.value), list);
                 if (list.length && list[0]) {
                     envelope.from = list[0];
                 }
             } else if (['To', 'Cc', 'Bcc'].indexOf(header.key) >= 0) {
-                this._convertAddresses([].concat.apply([], [].concat(header.value).map(addressparser.parse)), envelope.to);
+                this._convertAddresses(this._parseAddresses(header.value), envelope.to);
             }
         }.bind(this));
 
@@ -486,6 +486,22 @@
     };
 
     /////// PRIVATE METHODS
+
+    /**
+     * Parses addresses. Takes in a single address or an array or an
+     * array of address arrays (eg. To: [[first group], [second group],...])
+     *
+     * @param {Mixed} addresses Addresses to be parsed
+     * @return {Array} An array of address objects
+     */
+    MimeNode.prototype._parseAddresses = function(addresses) {
+        return [].concat.apply([], [].concat(addresses).map(function(address) {
+            if (address && address.address) {
+                address = this._convertAddresses(address);
+            }
+            return addressparser.parse(address);
+        }.bind(this)));
+    };
 
     /**
      * Normalizes a header key, uses Camel-Case form, except for uppercase MIME-
@@ -573,8 +589,6 @@
     MimeNode.prototype._encodeHeaderValue = function(key, value) {
         key = this._normalizeHeaderKey(key);
 
-        var addresses;
-
         switch (key) {
             case 'From':
             case 'Sender':
@@ -582,8 +596,7 @@
             case 'Cc':
             case 'Bcc':
             case 'Reply-To':
-                addresses = [].concat.apply([], [].concat(value).map(addressparser.parse));
-                return this._convertAddresses(addresses);
+                return this._convertAddresses(this._parseAddresses(value));
 
             case 'Message-Id':
             case 'In-Reply-To':
@@ -636,7 +649,7 @@
 
         uniqueList = uniqueList || [];
 
-        addresses.forEach(function(address) {
+        [].concat(addresses || []).forEach(function(address) {
             if (address.address) {
                 address.address = address.address.replace(/^.*?(?=\@)/, function(user) {
                     return mimefuncs.mimeWordsEncode(user, 'Q');

@@ -3,13 +3,13 @@
 require.config({
     baseUrl: '../',
     paths: {
-        'test': '../test',
-        'chai': '../node_modules/chai/chai',
-        'addressparser': '../node_modules/addressparser/src/addressparser',
-        'mimetypes': '../node_modules/mimetypes/src/mimetypes',
-        'mimefuncs': '../node_modules/mimefuncs/src/mimefuncs',
-        'punycode': '../node_modules/punycode/punycode.min',
-        'stringencoding': '../node_modules/mimefuncs/node_modules/stringencoding/dist/stringencoding'
+        'test': './test',
+        'chai': './node_modules/chai/chai',
+        'addressparser': './node_modules/addressparser/src/addressparser',
+        'mimetypes': './node_modules/mimetypes/src/mimetypes',
+        'mimefuncs': './node_modules/mimefuncs/src/mimefuncs',
+        'punycode': './node_modules/punycode/punycode.min',
+        'stringencoding': './node_modules/mimefuncs/node_modules/stringencoding/dist/stringencoding'
     }
 });
 

@@ -423,6 +423,30 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
 
                 expect(/^Content-Type: application\/zip; name=jogeva.zip$/m.test(msg)).to.be.true;
             });
+
+            it('should convert address objects', function() {
+                var msg = new Mailbuild(false).
+                setHeader({
+                    from: [{
+                        name: 'the safewithme testuser',
+                        address: 'safewithme.testuser@jõgeva.com'
+                    }],
+                    cc: [{
+                        name: 'the safewithme testuser',
+                        address: 'safewithme.testuser@jõgeva.com'
+                    }]
+                });
+
+                expect(/^From: "the safewithme testuser" <safewithme.testuser@xn\-\-jgeva-dua.com>$/m.test(msg.build())).to.be.true;
+                expect(/^Cc: "the safewithme testuser" <safewithme.testuser@xn\-\-jgeva-dua.com>$/m.test(msg.build())).to.be.true;
+
+                expect(msg.getEnvelope()).to.deep.equal({
+                    from: 'safewithme.testuser@xn--jgeva-dua.com',
+                    to: [
+                        'safewithme.testuser@xn--jgeva-dua.com'
+                    ]
+                });
+            });
         });
     });
 });
