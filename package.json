@@ -1,5 +1,6 @@
 {
-    "name": "mailbuild",
+
+"sinon": "^1.9.0",    "name": "mailbuild",
     "version": "0.2.1",
     "homepage": "https://github.com/whiteout-io/mailbuild",
     "description": "mailbuild is a low level rfc2822 message composer. Define your own mime tree, no magic included.",
@@ -33,6 +34,7 @@
         "mocha": "~1.16.2",
         "phantomjs": "~1.9.7-1",
         "requirejs": "~2.1.10",
+        "sinon": "^1.9.0",
         "arraybuffer-slice": "~0.0.2",
         "amdefine": "^0.1.0"
     },
