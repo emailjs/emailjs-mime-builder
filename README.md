@@ -12,12 +12,6 @@ Also, if you use phantomjs, you might need [this polyfill for ArrayBuffer #slice
 
 ## Installation
 
-### [volo](http://volojs.org/):
-
-Install with [volo](http://volojs.org/):
-
-    volo add whiteout-io/mailbuild/v0.1.0
-
 ### [Bower](http://bower.io/):
 
     bower install git@github.com:whiteout-io/mailbuild.git#v0.1.0
