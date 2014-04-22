@@ -4,7 +4,11 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
+define(function(require) {
+
+    var chai = require('chai');
+    var sinon = require('sinon');
+    var Mailbuild = require('../src/mailbuild');
 
     var expect = chai.expect;
     chai.Assertion.includeStack = true;
@@ -84,46 +88,27 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
                     key: 'key2',
                     value: 'value3'
                 }]);
-                expect(mb.getHeader('Key')).to.equal('value2');
-                expect(mb.getHeader('Key2')).to.equal('value3');
+
+                expect(mb._headers).to.deep.equal([{
+                    key: 'Key',
+                    value: 'value2'
+                }, {
+                    key: 'Key2',
+                    value: 'value3'
+                }]);
 
                 mb.setHeader({
                     key: 'value4',
                     key2: 'value5'
                 });
-                expect(mb.getHeader('Key')).to.equal('value4');
-                expect(mb.getHeader('Key2')).to.equal('value5');
 
-                expect(mb._headers.length, 2);
-            });
-
-            it('should not inclide bcc missing in output, but in envelope', function() {
-                var mb = new Mailbuild('text/plain').
-                setHeader({
-                    from: 'sender@example.com',
-                    to: 'receiver@example.com',
-                    bcc: 'bcc@example.com'
-                }),
-                    msg = mb.build(),
-                    envelope = mb.getEnvelope();
-
-                expect(envelope).to.deep.equal({
-                    from: 'sender@example.com',
-                    to: ['receiver@example.com', 'bcc@example.com']
-                });
-
-                expect(/^From: sender@example.com$/m.test(msg)).to.be.true;
-                expect(/^To: receiver@example.com$/m.test(msg)).to.be.true;
-                expect(!/^Bcc:/m.test(msg)).to.be.true;
-            });
-
-            it('should have unicode subject', function() {
-                var msg = new Mailbuild('text/plain').
-                setHeader({
-                    subject: 'jõgeval istus kägu metsas'
-                }).build();
-
-                expect(/^Subject: =\?UTF-8\?Q\?j=C3=B5geval\?= istus =\?UTF-8\?Q\?k=C3=A4gu\?= metsas$/m.test(msg)).to.be.true;
+                expect(mb._headers).to.deep.equal([{
+                    key: 'Key',
+                    value: 'value4'
+                }, {
+                    key: 'Key2',
+                    value: 'value5'
+                }]);
             });
         });
 
@@ -134,8 +119,6 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
                 mb.addHeader('key', 'value1');
                 mb.addHeader('key', 'value2');
 
-                expect(mb._headers.length).to.equal(2);
-
                 mb.addHeader([{
                     key: 'key',
                     value: 'value2'
@@ -144,60 +127,53 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
                     value: 'value3'
                 }]);
 
-                expect(mb._headers.length).to.equal(4);
-
                 mb.addHeader({
                     key: 'value4',
                     key2: 'value5'
                 });
 
-                expect(mb._headers.length).to.equal(6);
-                expect(mb.getHeader('Key')).to.equal('value1');
+                expect(mb._headers).to.deep.equal([{
+                    key: 'Key',
+                    value: 'value1'
+                }, {
+                    key: 'Key',
+                    value: 'value2'
+                }, {
+                    key: 'Key',
+                    value: 'value2'
+                }, {
+                    key: 'Key2',
+                    value: 'value3'
+                }, {
+                    key: 'Key',
+                    value: 'value4'
+                }, {
+                    key: 'Key2',
+                    value: 'value5'
+                }]);
             });
         });
 
-        describe('#_normalizeHeaderKey', function() {
-            it('should normalize header key', function() {
+        describe('#getHeader', function() {
+            it('should return first matching header value', function() {
                 var mb = new Mailbuild();
+                mb._headers = [{
+                    key: 'Key',
+                    value: 'value4'
+                }, {
+                    key: 'Key2',
+                    value: 'value5'
+                }];
 
-                expect(mb._normalizeHeaderKey('key')).to.equal('Key');
-                expect(mb._normalizeHeaderKey('mime-vERSION')).to.equal('MIME-Version');
-                expect(mb._normalizeHeaderKey('-a-long-name')).to.equal('-A-Long-Name');
+                expect(mb.getHeader('KEY')).to.equal('value4');
             });
         });
 
-        describe('#_buildHeaderValue', function() {
-            it('should build header value', function() {
+        describe('#setContent', function() {
+            it('should set the contents for a node', function() {
                 var mb = new Mailbuild();
-
-                expect(mb._buildHeaderValue({
-                    value: 'test'
-                })).to.equal('test');
-                expect(mb._buildHeaderValue({
-                    value: 'test',
-                    params: {
-                        a: 'b'
-                    }
-                })).to.equal('test; a=b');
-                expect(mb._buildHeaderValue({
-                    value: 'test',
-                    params: {
-                        a: ';'
-                    }
-                })).to.equal('test; a=";"');
-                expect(mb._buildHeaderValue({
-                    value: 'test',
-                    params: {
-                        a: ';"'
-                    }
-                })).to.equal('test; a=";\\""');
-                expect(mb._buildHeaderValue({
-                    value: 'test',
-                    params: {
-                        a: 'b',
-                        c: 'd'
-                    }
-                })).to.equal('test; a=b; c=d');
+                mb.setContent('abc');
+                expect(mb.content).to.equal('abc');
             });
         });
 
@@ -220,6 +196,7 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
 
                 expect(mb.build()).to.equal(expected);
             });
+
             it('should build child node', function() {
                 var mb = new Mailbuild('multipart/mixed'),
                     childNode = mb.createChild('text/plain').
@@ -266,6 +243,7 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
                 expect(/^Message\-Id:\s</m.test(msg)).to.be.true;
                 expect(/^MIME-Version: 1.0$/m.test(msg)).to.be.true;
             });
+
             it('should set content transfer encoding with string', function() {
                 var msg = new Mailbuild('text/plain').
                 setHeader({
@@ -283,37 +261,35 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
                 expect(msg).to.equal(expected);
             });
 
-        });
-        describe('#getEnvelope', function() {
-            it('should get envelope', function() {
-                expect(new Mailbuild().addHeader({
-                    from: 'From <from@example.com>',
-                    sender: 'Sender <sender@example.com>',
-                    to: 'receiver1@example.com'
-                }).addHeader({
-                    to: 'receiver2@example.com',
-                    cc: 'receiver1@example.com, receiver3@example.com',
-                    bcc: 'receiver4@example.com, Rec5 <receiver5@example.com>'
-                }).getEnvelope()).to.deep.equal({
-                    from: 'from@example.com',
-                    to: ['receiver1@example.com', 'receiver2@example.com', 'receiver3@example.com', 'receiver4@example.com', 'receiver5@example.com']
-                });
-
-                expect(new Mailbuild().addHeader({
-                    sender: 'Sender <sender@example.com>',
-                    to: 'receiver1@example.com'
-                }).addHeader({
-                    to: 'receiver2@example.com',
-                    cc: 'receiver1@example.com, receiver3@example.com',
-                    bcc: 'receiver4@example.com, Rec5 <receiver5@example.com>'
-                }).getEnvelope()).to.deep.equal({
+            it('should not inclide bcc missing in output, but in envelope', function() {
+                var mb = new Mailbuild('text/plain').
+                setHeader({
                     from: 'sender@example.com',
-                    to: ['receiver1@example.com', 'receiver2@example.com', 'receiver3@example.com', 'receiver4@example.com', 'receiver5@example.com']
-                });
-            });
-        });
+                    to: 'receiver@example.com',
+                    bcc: 'bcc@example.com'
+                }),
+                    msg = mb.build(),
+                    envelope = mb.getEnvelope();
 
-        describe('#setContent', function() {
+                expect(envelope).to.deep.equal({
+                    from: 'sender@example.com',
+                    to: ['receiver@example.com', 'bcc@example.com']
+                });
+
+                expect(/^From: sender@example.com$/m.test(msg)).to.be.true;
+                expect(/^To: receiver@example.com$/m.test(msg)).to.be.true;
+                expect(!/^Bcc:/m.test(msg)).to.be.true;
+            });
+
+            it('should have unicode subject', function() {
+                var msg = new Mailbuild('text/plain').
+                setHeader({
+                    subject: 'jõgeval istus kägu metsas'
+                }).build();
+
+                expect(/^Subject: =\?UTF-8\?Q\?j=C3=B5geval\?= istus =\?UTF-8\?Q\?k=C3=A4gu\?= metsas$/m.test(msg)).to.be.true;
+            });
+
             it('should setContent (arraybuffer)', function() {
                 var arr = new Uint8Array(256),
                     msg = new Mailbuild('text/plain').
@@ -338,6 +314,7 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
 
                 expect(msg).to.equal(expected);
             });
+
             it('should keep 7bit text as is', function() {
                 var msg = new Mailbuild('text/plain').
                 setContent('tere tere').
@@ -446,6 +423,222 @@ define(['chai', '../src/mailbuild'], function(chai, Mailbuild) {
                         'safewithme.testuser@xn--jgeva-dua.com'
                     ]
                 });
+            });
+        });
+
+        describe('#getEnvelope', function() {
+            it('should get envelope', function() {
+                expect(new Mailbuild().addHeader({
+                    from: 'From <from@example.com>',
+                    sender: 'Sender <sender@example.com>',
+                    to: 'receiver1@example.com'
+                }).addHeader({
+                    to: 'receiver2@example.com',
+                    cc: 'receiver1@example.com, receiver3@example.com',
+                    bcc: 'receiver4@example.com, Rec5 <receiver5@example.com>'
+                }).getEnvelope()).to.deep.equal({
+                    from: 'from@example.com',
+                    to: ['receiver1@example.com', 'receiver2@example.com', 'receiver3@example.com', 'receiver4@example.com', 'receiver5@example.com']
+                });
+
+                expect(new Mailbuild().addHeader({
+                    sender: 'Sender <sender@example.com>',
+                    to: 'receiver1@example.com'
+                }).addHeader({
+                    to: 'receiver2@example.com',
+                    cc: 'receiver1@example.com, receiver3@example.com',
+                    bcc: 'receiver4@example.com, Rec5 <receiver5@example.com>'
+                }).getEnvelope()).to.deep.equal({
+                    from: 'sender@example.com',
+                    to: ['receiver1@example.com', 'receiver2@example.com', 'receiver3@example.com', 'receiver4@example.com', 'receiver5@example.com']
+                });
+            });
+        });
+
+        describe('#_parseAddresses', function() {
+            it('should normalize header key', function() {
+                var mb = new Mailbuild();
+
+                expect(mb._parseAddresses('test address@example.com')).to.deep.equal([{
+                    address: 'address@example.com',
+                    name: 'test'
+                }]);
+
+                expect(mb._parseAddresses(['test address@example.com'])).to.deep.equal([{
+                    address: 'address@example.com',
+                    name: 'test'
+                }]);
+
+                expect(mb._parseAddresses([
+                    ['test address@example.com']
+                ])).to.deep.equal([{
+                    address: 'address@example.com',
+                    name: 'test'
+                }]);
+
+                expect(mb._parseAddresses([{
+                    address: 'address@example.com',
+                    name: 'test'
+                }])).to.deep.equal([{
+                    address: 'address@example.com',
+                    name: 'test'
+                }]);
+            });
+        });
+
+        describe('#_normalizeHeaderKey', function() {
+            it('should normalize header key', function() {
+                var mb = new Mailbuild();
+
+                expect(mb._normalizeHeaderKey('key')).to.equal('Key');
+                expect(mb._normalizeHeaderKey('mime-vERSION')).to.equal('MIME-Version');
+                expect(mb._normalizeHeaderKey('-a-long-name')).to.equal('-A-Long-Name');
+            });
+        });
+
+        describe('#_buildHeaderValue', function() {
+            it('should build header value', function() {
+                var mb = new Mailbuild();
+
+                expect(mb._buildHeaderValue({
+                    value: 'test'
+                })).to.equal('test');
+                expect(mb._buildHeaderValue({
+                    value: 'test',
+                    params: {
+                        a: 'b'
+                    }
+                })).to.equal('test; a=b');
+                expect(mb._buildHeaderValue({
+                    value: 'test',
+                    params: {
+                        a: ';'
+                    }
+                })).to.equal('test; a=";"');
+                expect(mb._buildHeaderValue({
+                    value: 'test',
+                    params: {
+                        a: ';"'
+                    }
+                })).to.equal('test; a=";\\""');
+                expect(mb._buildHeaderValue({
+                    value: 'test',
+                    params: {
+                        a: 'b',
+                        c: 'd'
+                    }
+                })).to.equal('test; a=b; c=d');
+            });
+        });
+
+        describe('#_escapeHeaderArgument', function() {
+            it('should return original value if possible', function() {
+                var mb = new Mailbuild();
+                expect(mb._escapeHeaderArgument('abc')).to.equal('abc');
+            });
+
+            it('should use quotes', function() {
+                var mb = new Mailbuild();
+                expect(mb._escapeHeaderArgument('abc "tere"')).to.equal('"abc \\"tere\\""');
+            });
+        });
+
+        describe('#_handleContentType', function() {
+            it('should do nothing on non multipart', function() {
+                var mb = new Mailbuild();
+                expect(mb.boundary).to.not.exist;
+                mb._handleContentType({
+                    value: 'text/plain'
+                });
+                expect(mb.boundary).to.be.false;
+                expect(mb.multipart).to.be.false;
+            });
+
+            it('should use provided boundary', function() {
+                var mb = new Mailbuild();
+                expect(mb.boundary).to.not.exist;
+                mb._handleContentType({
+                    value: 'multipart/mixed',
+                    params: {
+                        boundary: 'abc'
+                    }
+                });
+                expect(mb.boundary).to.equal('abc');
+                expect(mb.multipart).to.equal('mixed');
+            });
+
+            it('should generate boundary', function() {
+                var mb = new Mailbuild();
+                sinon.stub(mb, '_generateBoundary').returns('def');
+
+                expect(mb.boundary).to.not.exist;
+                mb._handleContentType({
+                    value: 'multipart/mixed',
+                    params: {}
+                });
+                expect(mb.boundary).to.equal('def');
+                expect(mb.multipart).to.equal('mixed');
+
+                mb._generateBoundary.restore();
+            });
+        });
+
+        describe('#_generateBoundary ', function() {
+            it('should genereate boundary string', function() {
+                var mb = new Mailbuild();
+                mb._nodeId = 'abc';
+                mb.rootNode.baseBoundary = 'def';
+                expect(mb._generateBoundary()).to.equal('----sinikael-?=_abc-def');
+            });
+        });
+
+        describe('#_encodeHeaderValue', function() {
+            it('should do noting if possible', function() {
+                var mb = new Mailbuild();
+                expect(mb._encodeHeaderValue('x-my', 'test value')).to.equal('test value');
+            });
+
+            it('should encode non ascii characters', function() {
+                var mb = new Mailbuild();
+                expect(mb._encodeHeaderValue('x-my', 'test jõgeva value')).to.equal('test =?UTF-8?Q?j=C3=B5geva?= value');
+            });
+
+            it('should format references', function() {
+                var mb = new Mailbuild();
+                expect(mb._encodeHeaderValue('references', 'abc def')).to.equal('<abc> <def>');
+                expect(mb._encodeHeaderValue('references', ['abc', 'def'])).to.equal('<abc> <def>');
+            });
+
+            it('should format message-id', function() {
+                var mb = new Mailbuild();
+                expect(mb._encodeHeaderValue('message-id', 'abc')).to.equal('<abc>');
+            });
+
+            it('should format addresses', function() {
+                var mb = new Mailbuild();
+                expect(mb._encodeHeaderValue('from', {
+                    name: 'the safewithme testuser',
+                    address: 'safewithme.testuser@jõgeva.com'
+                })).to.equal('"the safewithme testuser" <safewithme.testuser@xn--jgeva-dua.com>');
+            });
+        });
+
+        describe('#_convertAddresses', function() {
+            it('should convert address object to a string', function() {
+                var mb = new Mailbuild();
+                expect(mb._convertAddresses([{
+                    name: 'Jõgeva Ants',
+                    address: 'ants@jõgeva.ee'
+                }, {
+                    name: 'Composers',
+                    group: [{
+                        address: 'sebu@example.com',
+                        name: 'Bach, Sebastian'
+                    }, {
+                        address: 'mozart@example.com',
+                        name: 'Mozzie'
+                    }]
+                }])).to.equal('"=?UTF-8?Q?J=C3=B5geva?= Ants" <ants@xn--jgeva-dua.ee>, Composers:"Bach, Sebastian" <sebu@example.com>, "Mozzie" <mozart@example.com>;');
             });
         });
     });

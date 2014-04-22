@@ -9,7 +9,13 @@ require.config({
         'mimetypes': './node_modules/mimetypes/src/mimetypes',
         'mimefuncs': './node_modules/mimefuncs/src/mimefuncs',
         'punycode': './node_modules/punycode/punycode.min',
-        'stringencoding': './node_modules/mimefuncs/node_modules/stringencoding/dist/stringencoding'
+        'stringencoding': './node_modules/mimefuncs/node_modules/stringencoding/dist/stringencoding',
+        'sinon': './node_modules/sinon/pkg/sinon',
+    },
+    shim: {
+        sinon: {
+            exports: 'sinon',
+        }
     }
 });
 
