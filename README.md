@@ -22,7 +22,7 @@ Also, if you use phantomjs, you might need [this polyfill for ArrayBuffer #slice
 
 ### Dependencies
 
-This module has dependencies that will not automatically be fetched.
+This module has dependencies that will be fetched automatically.
 
 * [mimefuncs](https://github.com/whiteout-io/mimefuncs/)
 * [mimetypes](https://github.com/whiteout-io/mimetypes/)
