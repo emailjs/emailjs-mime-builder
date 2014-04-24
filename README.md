@@ -28,9 +28,7 @@ This module has dependencies that will be fetched automatically.
 * [mimetypes](https://github.com/whiteout-io/mimetypes/)
 * [addressparser](https://github.com/whiteout-io/addressparser/)
 * [punycode.js](https://github.com/bestiejs/punycode.js)
-
-* [stringencoding](https://github.com/whiteout-io/stringencoding) // every browser except ff
-* [arraybuffer-slice](https://github.com/ttaubert/node-arraybuffer-slice) // phantomjs
+* [stringencoding](https://github.com/whiteout-io/stringencoding)
 
 ## API
 
