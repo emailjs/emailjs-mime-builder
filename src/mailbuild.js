@@ -360,7 +360,7 @@
         }
 
         if (this.filename) {
-            filename = mimefuncs.mimeWordsEncode(this.filename, 'Q');
+            filename = mimefuncs.mimeWordsEncode(this.filename, 'Q', 52);
             if (!this.getHeader('Content-Disposition')) {
                 this.setHeader('Content-Disposition', 'attachment');
             }
@@ -633,7 +633,7 @@
             default:
                 value = (value || '').toString().replace(/\r?\n|\r/g, ' ');
                 // mimeWordsEncode only encodes if needed, otherwise the original string is returned
-                return mimefuncs.mimeWordsEncode(value, 'Q');
+                return mimefuncs.mimeWordsEncode(value, 'Q', 52);
         }
     };
 
@@ -652,7 +652,7 @@
         [].concat(addresses || []).forEach(function(address) {
             if (address.address) {
                 address.address = address.address.replace(/^.*?(?=\@)/, function(user) {
-                    return mimefuncs.mimeWordsEncode(user, 'Q');
+                    return mimefuncs.mimeWordsEncode(user, 'Q', 52);
                 }).replace(/@.+$/, function(domain) {
                     return '@' + punycode.toASCII(domain.substr(1));
                 });
@@ -660,7 +660,7 @@
                 if (!address.name) {
                     values.push(address.address);
                 } else if (address.name) {
-                    address.name = mimefuncs.mimeWordsEncode(address.name, 'Q');
+                    address.name = mimefuncs.mimeWordsEncode(address.name, 'Q', 52);
                     values.push('"' + address.name + '" <' + address.address + '>');
                 }
 
