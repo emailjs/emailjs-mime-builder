@@ -315,10 +315,10 @@
 
     /**
      * Sets body content for current node. If the value is a string, charset is added automatically
-     * to Content-Type (if it is text/*). If the value is an ArrayBuffer, you need to specify
+     * to Content-Type (if it is text/*). If the value is a Typed Array, you need to specify
      * the charset yourself
      *
-     * @param (String|ArrayBuffer) content Body content
+     * @param (String|Uint8Array) content Body content
      * @return {Object} current node
      */
     MimeNode.prototype.setContent = function(content) {

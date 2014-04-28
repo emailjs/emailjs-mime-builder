@@ -8,8 +8,6 @@
 
 This module requires `TextEncoder` and `TextDecoder` to exist as part of the StringEncoding API (see: [MDN](https://developer.mozilla.org/en-US/docs/WebAPI/Encoding_API) [whatwg.org](http://encoding.spec.whatwg.org/#api)). Firefox 19+ is basically the only browser that supports this at the time of writing, while [Chromium in canary, not stable](https://code.google.com/p/chromium/issues/detail?id=243354). Luckily, [there is a polyfill](https://github.com/whiteout-io/stringencoding)!
 
-Also, if you use phantomjs, you might need [this polyfill for ArrayBuffer #slice](https://github.com/ttaubert/node-arraybuffer-slice)
-
 ## Installation
 
 ### [Bower](http://bower.io/):
@@ -260,7 +258,7 @@ new Mailbuild("text/plain").getHeader("content-type"); // text/plain
 ## setContent
 
 Sets body content for current node. If the value is a string, charset is added automatically
-to Content-Type (if it is `text/*`). If the value is an ArrayBuffer, you need to specify the charset yourself.
+to Content-Type (if it is `text/*`). If the value is a Typed Array, you need to specify the charset yourself.
 
 ```javascript
 node.setContent(body)
@@ -268,7 +266,7 @@ node.setContent(body)
 
 Where
 
-  * **body** - *String|ArrayBuffer* body content
+  * **body** - *String|Uint8Array* body content
 
 **Example**
 
