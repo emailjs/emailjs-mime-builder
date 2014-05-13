@@ -544,7 +544,7 @@
      * @return {String} escaped and quoted (if needed) argument value
      */
     MimeNode.prototype._escapeHeaderArgument = function(value) {
-        if (value.match(/[\s'\\';\/=]|^\-/g)) {
+        if (value.match(/[\s'"\\;\/=]|^\-/g)) {
             return '"' + value.replace(/(["\\])/g, "\\$1") + '"';
         } else {
             return value;
@@ -660,19 +660,35 @@
                 if (!address.name) {
                     values.push(address.address);
                 } else if (address.name) {
-                    address.name = mimefuncs.mimeWordsEncode(address.name, 'Q', 52);
-                    values.push('"' + address.name + '" <' + address.address + '>');
+                    values.push(this._encodeAddressName(address.name) + ' <' + address.address + '>');
                 }
 
                 if (uniqueList.indexOf(address.address) < 0) {
                     uniqueList.push(address.address);
                 }
             } else if (address.group) {
-                values.push(address.name + ':' + (address.group.length ? this._convertAddresses(address.group, uniqueList) : '').trim() + ';');
+                values.push(this._encodeAddressName(address.name) + ':' + (address.group.length ? this._convertAddresses(address.group, uniqueList) : '').trim() + ';');
             }
         }.bind(this));
 
         return values.join(', ');
+    };
+
+    /**
+     * If needed, mime encodes the name part
+     *
+     * @param {String} name Name part of an address
+     * @returns {String} Mime word encoded string if needed
+     */
+    MimeNode.prototype._encodeAddressName = function(name) {
+        if (!/^[\w ']*$/.test(name)) {
+            if (/^[\x20-\x7e]*$/.test(name)) {
+                return '"' + name.replace(/([\\"])/g, '\\$1') + '"';
+            } else {
+                return mimefuncs.mimeWordEncode(name, 'Q', 52);
+            }
+        }
+        return name;
     };
 
     return MimeNode;

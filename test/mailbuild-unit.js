@@ -423,8 +423,8 @@ define(function(require) {
                     }]
                 });
 
-                expect(/^From: "the safewithme testuser" <safewithme.testuser@xn\-\-jgeva-dua.com>$/m.test(msg.build())).to.be.true;
-                expect(/^Cc: "the safewithme testuser" <safewithme.testuser@xn\-\-jgeva-dua.com>$/m.test(msg.build())).to.be.true;
+                expect(/^From: the safewithme testuser <safewithme.testuser@xn\-\-jgeva-dua.com>$/m.test(msg.build())).to.be.true;
+                expect(/^Cc: the safewithme testuser <safewithme.testuser@xn\-\-jgeva-dua.com>$/m.test(msg.build())).to.be.true;
 
                 expect(msg.getEnvelope()).to.deep.equal({
                     from: 'safewithme.testuser@xn--jgeva-dua.com',
@@ -628,7 +628,7 @@ define(function(require) {
                 expect(mb._encodeHeaderValue('from', {
                     name: 'the safewithme testuser',
                     address: 'safewithme.testuser@jõgeva.com'
-                })).to.equal('"the safewithme testuser" <safewithme.testuser@xn--jgeva-dua.com>');
+                })).to.equal('the safewithme testuser <safewithme.testuser@xn--jgeva-dua.com>');
             });
         });
 
@@ -647,7 +647,39 @@ define(function(require) {
                         address: 'mozart@example.com',
                         name: 'Mozzie'
                     }]
-                }])).to.equal('"=?UTF-8?Q?J=C3=B5geva?= Ants" <ants@xn--jgeva-dua.ee>, Composers:"Bach, Sebastian" <sebu@example.com>, "Mozzie" <mozart@example.com>;');
+                }])).to.equal('=?UTF-8?Q?J=C3=B5geva_Ants?= <ants@xn--jgeva-dua.ee>, Composers:"Bach, Sebastian" <sebu@example.com>, Mozzie <mozart@example.com>;');
+            });
+
+            it('should keep ascii name as is', function() {
+                var mb = new Mailbuild();
+                expect(mb._convertAddresses([{
+                    name: 'O\'Vigala Sass',
+                    address: 'a@b.c'
+                }])).to.equal('O\'Vigala Sass <a@b.c>');
+            });
+
+            it('should include name in quotes for special symbols', function() {
+                var mb = new Mailbuild();
+                expect(mb._convertAddresses([{
+                    name: 'Sass, Vigala',
+                    address: 'a@b.c'
+                }])).to.equal('"Sass, Vigala" <a@b.c>');
+            });
+
+            it('should escape quotes', function() {
+                var mb = new Mailbuild();
+                expect(mb._convertAddresses([{
+                    name: '"Vigala Sass"',
+                    address: 'a@b.c'
+                }])).to.equal('"\\"Vigala Sass\\"" <a@b.c>');
+            });
+
+            it('should mime encode unicode names', function() {
+                var mb = new Mailbuild();
+                expect(mb._convertAddresses([{
+                    name: '"Jõgeva Sass"',
+                    address: 'a@b.c'
+                }])).to.equal('=?UTF-8?Q?=22J=C3=B5geva_Sass=22?= <a@b.c>');
             });
         });
     });
