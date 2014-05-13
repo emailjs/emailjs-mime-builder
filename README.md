@@ -12,11 +12,11 @@ This module requires `TextEncoder` and `TextDecoder` to exist as part of the Str
 
 ### [Bower](http://bower.io/):
 
-    bower install git@github.com:whiteout-io/mailbuild.git#v0.1.0
+    bower install git@github.com:whiteout-io/mailbuild.git#v0.3.1
 
 ### [npm](https://www.npmjs.org/):
 
-    npm install https://github.com/whiteout-io/mailbuild/tarball/v0.1.0
+    npm install https://github.com/whiteout-io/mailbuild/tarball/v0.3.1
 
 ### Dependencies
 
