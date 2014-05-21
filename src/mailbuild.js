@@ -334,12 +334,13 @@
      */
     MimeNode.prototype.build = function() {
         var lines = [],
+            contentType = (this.getHeader('Content-Type') || '').toString().toLowerCase().trim(),
             transferEncoding, flowed;
 
         if (this.content) {
             transferEncoding = (this.getHeader('Content-Transfer-Encoding') || '').toString().toLowerCase().trim();
             if (!transferEncoding || ['base64', 'quoted-printable'].indexOf(transferEncoding) < 0) {
-                if ((this.getHeader('Content-Type') || '').toString().toLowerCase().trim().match(/^text\//i)) {
+                if (/^text\//i.test(contentType)) {
                     // If there are no special symbols, no need to modify the text
                     if (
                         typeof this.content === 'string' && !/[\x00-\x08\x0b\x0c\x0e-\x1f\u0080-\uFFFF]/.test(this.content)
@@ -352,11 +353,14 @@
                     } else {
                         transferEncoding = 'quoted-printable';
                     }
-                } else {
+                } else if (!/^multipart\//i.test(contentType)) {
                     transferEncoding = transferEncoding || 'base64';
                 }
             }
-            this.setHeader('Content-Transfer-Encoding', transferEncoding);
+
+            if (transferEncoding) {
+                this.setHeader('Content-Transfer-Encoding', transferEncoding);
+            }
         }
 
         if (this.filename && !this.getHeader('Content-Disposition')) {

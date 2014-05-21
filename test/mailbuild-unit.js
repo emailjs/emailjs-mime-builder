@@ -455,6 +455,48 @@ define(function(require) {
 
                 expect(mb.build()).to.equal(expected);
             });
+
+            it('should set default transfer encoding for application content', function() {
+                var mb = new Mailbuild('application/x-my-stuff').
+                setHeader({
+                    date: '12345',
+                    'message-id': '67890'
+                }).
+                setContent('Hello world!'),
+
+                expected = 'Content-Type: application/x-my-stuff\r\n' +
+                    'Date: 12345\r\n' +
+                    'Message-Id: <67890>\r\n' +
+                    'Content-Transfer-Encoding: base64\r\n' +
+                    'MIME-Version: 1.0\r\n' +
+                    '\r\n' +
+                    'SGVsbG8gd29ybGQh';
+
+                expect(mb.build()).to.equal(expected);
+            });
+
+            it('should not set transfer encoding for multipart content', function() {
+                var mb = new Mailbuild('multipart/global').
+                setHeader({
+                    date: '12345',
+                    'message-id': '67890'
+                }).
+                setContent('Hello world!'),
+
+                expected = 'Content-Type: multipart/global; boundary=abc\r\n' +
+                    'Date: 12345\r\n' +
+                    'Message-Id: <67890>\r\n' +
+                    'MIME-Version: 1.0\r\n' +
+                    '\r\n' +
+                    'Hello world!\r\n' +
+                    '\r\n' +
+                    '--abc--' +
+                    '\r\n';
+
+                mb.boundary = 'abc';
+
+                expect(mb.build()).to.equal(expected);
+            });
         });
 
         describe('#getEnvelope', function() {
