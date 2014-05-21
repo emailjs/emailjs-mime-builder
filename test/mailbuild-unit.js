@@ -186,13 +186,13 @@ define(function(require) {
                 }).
                 setContent('Hello world!'),
 
-                    expected = 'Content-Type: text/plain\r\n' +
-                        'Date: 12345\r\n' +
-                        'Message-Id: <67890>\r\n' +
-                        'Content-Transfer-Encoding: 7bit\r\n' +
-                        'MIME-Version: 1.0\r\n' +
-                        '\r\n' +
-                        'Hello world!';
+                expected = 'Content-Type: text/plain\r\n' +
+                    'Date: 12345\r\n' +
+                    'Message-Id: <67890>\r\n' +
+                    'Content-Transfer-Encoding: 7bit\r\n' +
+                    'MIME-Version: 1.0\r\n' +
+                    '\r\n' +
+                    'Hello world!';
 
                 expect(mb.build()).to.equal(expected);
             });
@@ -200,12 +200,12 @@ define(function(require) {
             it('should build child node', function() {
                 var mb = new Mailbuild('multipart/mixed'),
                     childNode = mb.createChild('text/plain').
-                    setContent('Hello world!'),
+                setContent('Hello world!'),
 
-                    expected = 'Content-Type: text/plain\r\n' +
-                        'Content-Transfer-Encoding: 7bit\r\n' +
-                        '\r\n' +
-                        'Hello world!';
+                expected = 'Content-Type: text/plain\r\n' +
+                    'Content-Transfer-Encoding: 7bit\r\n' +
+                    '\r\n' +
+                    'Hello world!';
 
                 expect(childNode.build()).to.equal(expected);
             });
@@ -219,17 +219,17 @@ define(function(require) {
                     'message-id': '67890'
                 }),
 
-                    expected = 'Content-Type: multipart/mixed; boundary="----sinikael-?=_1-test"\r\n' +
-                        'Date: 12345\r\n' +
-                        'Message-Id: <67890>\r\n' +
-                        'MIME-Version: 1.0\r\n' +
-                        '\r\n' +
-                        '------sinikael-?=_1-test\r\n' +
-                        'Content-Type: text/plain\r\n' +
-                        'Content-Transfer-Encoding: 7bit\r\n' +
-                        '\r\n' +
-                        'Hello world!\r\n' +
-                        '------sinikael-?=_1-test--\r\n';
+                expected = 'Content-Type: multipart/mixed; boundary="----sinikael-?=_1-test"\r\n' +
+                    'Date: 12345\r\n' +
+                    'Message-Id: <67890>\r\n' +
+                    'MIME-Version: 1.0\r\n' +
+                    '\r\n' +
+                    '------sinikael-?=_1-test\r\n' +
+                    'Content-Type: text/plain\r\n' +
+                    'Content-Transfer-Encoding: 7bit\r\n' +
+                    '\r\n' +
+                    'Hello world!\r\n' +
+                    '------sinikael-?=_1-test--\r\n';
 
                 mb.createChild('text/plain').setContent('Hello world!');
 
@@ -252,7 +252,7 @@ define(function(require) {
                 setContent('JÕGEVA').
                 build(),
 
-                    expected = 'J=C3=95GEVA';
+                expected = 'J=C3=95GEVA';
 
                 msg = msg.split('\r\n\r\n');
                 msg.shift();
@@ -268,8 +268,8 @@ define(function(require) {
                     to: 'receiver@example.com',
                     bcc: 'bcc@example.com'
                 }),
-                    msg = mb.build(),
-                    envelope = mb.getEnvelope();
+                msg = mb.build(),
+                envelope = mb.getEnvelope();
 
                 expect(envelope).to.deep.equal({
                     from: 'sender@example.com',
@@ -302,16 +302,16 @@ define(function(require) {
             it('should setContent (arraybuffer)', function() {
                 var arr = new Uint8Array(256),
                     msg = new Mailbuild('text/plain').
-                    setHeader({
-                        'Content-Transfer-Encoding': 'base64'
-                    }).
-                    setContent(arr),
+                setHeader({
+                    'Content-Transfer-Encoding': 'base64'
+                }).
+                setContent(arr),
 
-                    expected = 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4\r\n' +
-                        'OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3Bx\r\n' +
-                        'cnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmq\r\n' +
-                        'q6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj\r\n' +
-                        '5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w==';
+                expected = 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4\r\n' +
+                    'OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3Bx\r\n' +
+                    'cnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmq\r\n' +
+                    'q6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj\r\n' +
+                    '5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w==';
 
                 for (var i = 0, len = arr.length; i < len; i++) {
                     arr[i] = i;
@@ -382,7 +382,7 @@ define(function(require) {
                 build();
 
                 expect(/\r\n\r\njogeva$/.test(msg)).to.be.true;
-                expect(/^Content-Type: text\/plain; name=jogeva.txt$/m.test(msg)).to.be.true;
+                expect(/^Content-Type: text\/plain$/m.test(msg)).to.be.true;
                 expect(/^Content-Transfer-Encoding: 7bit$/m.test(msg)).to.be.true;
                 expect(/^Content-Disposition: attachment; filename=jogeva.txt$/m.test(msg)).to.be.true;
             });
@@ -395,9 +395,9 @@ define(function(require) {
                 build();
 
                 expect(/\r\n\r\nj=C3=B5geva$/.test(msg)).to.be.true;
-                expect(/^Content-Type: text\/plain; charset=utf-8; name="=\?UTF-8\?Q\?j=C3=B5geva.txt\?="$/m.test(msg)).to.be.true;
+                expect(/^Content-Type: text\/plain; charset=utf-8$/m.test(msg)).to.be.true;
                 expect(/^Content-Transfer-Encoding: quoted-printable$/m.test(msg)).to.be.true;
-                expect(/^Content-Disposition: attachment; filename="=\?UTF-8\?Q\?j=C3=B5geva.txt\?="$/m.test(msg)).to.be.true;
+                expect(/^Content-Disposition: attachment; filename\*0\*="utf-8''j%C3%B5geva.txt"$/m.test(msg)).to.be.true;
             });
 
             it('should detect content type from filename', function() {
@@ -407,7 +407,7 @@ define(function(require) {
                 setContent('jogeva').
                 build();
 
-                expect(/^Content-Type: application\/zip; name=jogeva.zip$/m.test(msg)).to.be.true;
+                expect(/^Content-Type: application\/zip$/m.test(msg)).to.be.true;
             });
 
             it('should convert address objects', function() {
