@@ -399,6 +399,11 @@
                     return;
             }
 
+            // skip empty lines
+            if (!value) {
+                return;
+            }
+
             lines.push(mimefuncs.foldLines(key + ': ' + this._encodeHeaderValue(key, value), 76));
         }.bind(this));
 
