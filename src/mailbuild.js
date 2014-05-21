@@ -334,7 +334,7 @@
      */
     MimeNode.prototype.build = function() {
         var lines = [],
-            transferEncoding, flowed, filename;
+            transferEncoding, flowed;
 
         if (this.content) {
             transferEncoding = (this.getHeader('Content-Transfer-Encoding') || '').toString().toLowerCase().trim();
@@ -359,11 +359,8 @@
             this.setHeader('Content-Transfer-Encoding', transferEncoding);
         }
 
-        if (this.filename) {
-            filename = mimefuncs.mimeWordsEncode(this.filename, 'Q', 52);
-            if (!this.getHeader('Content-Disposition')) {
-                this.setHeader('Content-Disposition', 'attachment');
-            }
+        if (this.filename && !this.getHeader('Content-Disposition')) {
+            this.setHeader('Content-Disposition', 'attachment');
         }
 
         this._headers.forEach(function(header) {
@@ -374,8 +371,8 @@
             switch (header.key) {
                 case 'Content-Disposition':
                     structured = mimefuncs.parseHeaderValue(value);
-                    if (filename) {
-                        structured.params.filename = filename;
+                    if (this.filename) {
+                        structured.params.filename = this.filename;
                     }
                     value = this._buildHeaderValue(structured);
                     break;
@@ -393,10 +390,6 @@
 
                     if (structured.value.match(/^text\//) && typeof this.content === 'string' && /[\u0080-\uFFFF]/.test(this.content)) {
                         structured.params.charset = 'utf-8';
-                    }
-
-                    if (filename) {
-                        structured.params.name = filename;
                     }
 
                     value = this._buildHeaderValue(structured);
@@ -511,7 +504,7 @@
      */
     MimeNode.prototype._normalizeHeaderKey = function(key) {
         return (key || '').toString().
-        // no newlines in keys
+            // no newlines in keys
         replace(/\r?\n|\r/g, ' ').
         trim().toLowerCase().
         // use uppercase words, except MIME
@@ -530,7 +523,18 @@
         var paramsArray = [];
 
         Object.keys(structured.params || {}).forEach(function(param) {
-            paramsArray.push(param + '=' + this._escapeHeaderArgument(structured.params[param]));
+            // filename might include unicode characters so it is a special case
+            if (param === 'filename') {
+                mimefuncs.continuationEncode(param, structured.params[param], 50).forEach(function(encodedParam) {
+                    if (encodedParam.key === param) {
+                        paramsArray.push(encodedParam.key + '=' + encodedParam.value);
+                    } else {
+                        paramsArray.push(encodedParam.key + '="' + encodedParam.value + '"');
+                    }
+                });
+            } else {
+                paramsArray.push(param + '=' + this._escapeHeaderArgument(structured.params[param]));
+            }
         }.bind(this));
 
         return structured.value + (paramsArray.length ? '; ' + paramsArray.join('; ') : '');
