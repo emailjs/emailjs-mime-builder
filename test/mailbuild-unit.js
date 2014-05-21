@@ -433,6 +433,28 @@ define(function(require) {
                     ]
                 });
             });
+
+            it('should skip empty header', function() {
+                var mb = new Mailbuild('text/plain').
+                setHeader({
+                    a: 'b',
+                    cc: '',
+                    date: 'zzz',
+                    'message-id': '67890'
+                }).
+                setContent('Hello world!'),
+
+                expected = 'Content-Type: text/plain\r\n' +
+                    'A: b\r\n' +
+                    'Date: zzz\r\n' +
+                    'Message-Id: <67890>\r\n' +
+                    'Content-Transfer-Encoding: 7bit\r\n' +
+                    'MIME-Version: 1.0\r\n' +
+                    '\r\n' +
+                    'Hello world!';
+
+                expect(mb.build()).to.equal(expected);
+            });
         });
 
         describe('#getEnvelope', function() {
