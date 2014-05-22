@@ -342,9 +342,7 @@
             if (!transferEncoding || ['base64', 'quoted-printable'].indexOf(transferEncoding) < 0) {
                 if (/^text\//i.test(contentType)) {
                     // If there are no special symbols, no need to modify the text
-                    if (
-                        typeof this.content === 'string' && !/[\x00-\x08\x0b\x0c\x0e-\x1f\u0080-\uFFFF]/.test(this.content)
-                    ) {
+                    if (this._isPlainText(this.content)) {
                         // If there are lines longer than 76 symbols/bytes, make the text 'flowed'
                         if (/^.{77,}/m.test(this.content)) {
                             flowed = true;
@@ -703,6 +701,20 @@
             }
         }
         return name;
+    };
+
+    /**
+     * Checks if a value is plaintext string (uses only printable 7bit chars)
+     *
+     * @param {String} value String to be tested
+     * @returns {Boolean} true if it is a plaintext string
+     */
+    MimeNode.prototype._isPlainText = function(value) {
+        if (typeof value !== 'string' || /[\x00-\x08\x0b\x0c\x0e-\x1f\u0080-\uFFFF]/.test(value)) {
+            return false;
+        } else {
+            return true;
+        }
     };
 
     return MimeNode;

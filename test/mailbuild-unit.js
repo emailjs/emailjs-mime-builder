@@ -748,5 +748,22 @@ define(function(require) {
                 }])).to.equal('=?UTF-8?Q?=22J=C3=B5geva_Sass=22?= <a@b.c>');
             });
         });
+
+        describe('#_isPlainText', function() {
+            it('should return true', function() {
+                var mb = new Mailbuild();
+                expect(mb._isPlainText('az09\t\r\n~!?')).to.be.true;
+            });
+
+            it('should return false on low bits', function() {
+                var mb = new Mailbuild();
+                expect(mb._isPlainText('az09\n\x08!?')).to.be.false;
+            });
+
+            it('should return false on high bits', function() {
+                var mb = new Mailbuild();
+                expect(mb._isPlainText('az09\nõ!?')).to.be.false;
+            });
+        });
     });
 });
