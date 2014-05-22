@@ -439,6 +439,8 @@ define(function(require) {
                 setHeader({
                     a: 'b',
                     cc: '',
+                    dd: [],
+                    o: false,
                     date: 'zzz',
                     'message-id': '67890'
                 }).

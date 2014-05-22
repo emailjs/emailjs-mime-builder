@@ -404,11 +404,12 @@
             }
 
             // skip empty lines
-            if (!value) {
+            value = this._encodeHeaderValue(key, value);
+            if (!(value || '').toString().trim()) {
                 return;
             }
 
-            lines.push(mimefuncs.foldLines(key + ': ' + this._encodeHeaderValue(key, value), 76));
+            lines.push(mimefuncs.foldLines(key + ': ' + value, 76));
         }.bind(this));
 
         // Ensure mandatory header fields
