@@ -417,7 +417,18 @@
             }
             // You really should define your own Message-Id field
             if (!this.getHeader('Message-Id')) {
-                lines.push('Message-Id: <' + this.date.getTime() + '@localhost>');
+                lines.push('Message-Id: <' +
+                    // crux to generate random strings like this:
+                    // "1401391905590-58aa8c32-d32a065c-c1a2aad2"
+                    [0, 0, 0].reduce(function(prev) {
+                        return prev + '-' + Math.floor((1 + Math.random()) * 0x100000000).
+                        toString(16).
+                        substring(1);
+                    }, Date.now()) +
+                    '@' +
+                    // try to use the domain of the FROM address or fallback localhost
+                    (this.getEnvelope().from || 'localhost').split('@').pop() +
+                    '>');
             }
             if (!this.getHeader('MIME-Version')) {
                 lines.push('MIME-Version: 1.0');

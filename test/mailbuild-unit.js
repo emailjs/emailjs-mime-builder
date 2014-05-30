@@ -499,6 +499,21 @@ define(function(require) {
 
                 expect(mb.build()).to.equal(expected);
             });
+
+            it('should use from domain for message-id', function() {
+                var mb = new Mailbuild('text/plain').
+                setHeader({
+                    from: 'test@example.com'
+                });
+
+                expect(/^Message-Id: <\d+(\-[a-f0-9]{8}){3}@example\.com>$/m.test(mb.build())).to.be.true;
+            });
+
+            it('should fallback to localhost for message-id', function() {
+                var mb = new Mailbuild('text/plain');
+
+                expect(/^Message-Id: <\d+(\-[a-f0-9]{8}){3}@localhost>$/m.test(mb.build())).to.be.true;
+            });
         });
 
         describe('#getEnvelope', function() {
