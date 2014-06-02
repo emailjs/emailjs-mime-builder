@@ -10,10 +10,6 @@ This module requires `TextEncoder` and `TextDecoder` to exist as part of the Str
 
 ## Installation
 
-### [Bower](http://bower.io/):
-
-    bower install git@github.com:whiteout-io/mailbuild.git#<TAG_NAME>
-
 ### [npm](https://www.npmjs.org/):
 
     npm install https://github.com/whiteout-io/mailbuild/tarball/<TAG_NAME>

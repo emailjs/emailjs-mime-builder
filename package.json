@@ -1,6 +1,6 @@
 {
     "name": "mailbuild",
-    "version": "0.3.1",
+    "version": "0.3.3",
     "homepage": "https://github.com/whiteout-io/mailbuild",
     "description": "mailbuild is a low level rfc2822 message composer. Define your own mime tree, no magic included.",
     "author": "Andris Reinman <andris@kreata.ee>",
@@ -18,7 +18,7 @@
     },
     "main": "src/mailbuild",
     "dependencies": {
-        "mimefuncs": "https://github.com/whiteout-io/mimefuncs/tarball/v0.3.1",
+        "mimefuncs": "https://github.com/whiteout-io/mimefuncs/tarball/v0.3.2",
         "mimetypes": " https://github.com/whiteout-io/mimetypes/tarball/v0.1.1",
         "addressparser": "https://github.com/whiteout-io/addressparser/tarball/v0.1.2",
         "punycode": "~1.2.4"
