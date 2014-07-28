@@ -5,11 +5,11 @@ require.config({
     paths: {
         'test': './test',
         'chai': './node_modules/chai/chai',
-        'wo-addressparser': './node_modules/wo-addressparser/src/addressparser',
+        'addressparser': './node_modules/wo-addressparser/src/addressparser',
         'mimetypes': './node_modules/mimetypes/src/mimetypes',
         'mimefuncs': './node_modules/mimefuncs/src/mimefuncs',
         'punycode': './node_modules/punycode/punycode.min',
-        'wo-stringencoding': './node_modules/mimefuncs/node_modules/wo-stringencoding/dist/stringencoding',
+        'stringencoding': './node_modules/mimefuncs/node_modules/wo-stringencoding/dist/stringencoding',
         'sinon': './node_modules/sinon/pkg/sinon',
     },
     shim: {
