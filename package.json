@@ -1,6 +1,6 @@
 {
     "name": "mailbuild",
-    "version": "0.3.6",
+    "version": "0.3.7",
     "homepage": "https://github.com/whiteout-io/mailbuild",
     "description": "mailbuild is a low level rfc2822 message composer. Define your own mime tree, no magic included.",
     "author": "Andris Reinman <andris@kreata.ee>",

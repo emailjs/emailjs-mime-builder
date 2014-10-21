@@ -447,12 +447,12 @@
                     break;
                 default:
                     if (flowed) {
-                        lines.push(mimefuncs.foldLines(this.content.
+                        lines.push(mimefuncs.foldLines(this.content.replace(/\r?\n/g, '\r\n').
                             // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
                             replace(/^( |From|>)/igm, ' $1'),
                             76, true));
                     } else {
-                        lines.push(this.content);
+                        lines.push(this.content.replace(/\r?\n/g, '\r\n'));
                     }
             }
             if (this.multipart) {

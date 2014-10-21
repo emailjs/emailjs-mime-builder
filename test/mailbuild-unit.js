@@ -331,6 +331,14 @@
                 expect(/^Content-Transfer-Encoding: 7bit$/m.test(msg)).to.be.true;
             });
 
+            it('should convert 7bit newlines', function() {
+                var msg = new Mailbuild('text/plain').
+                setContent('tere\ntere').
+                build();
+
+                expect(/\r\n\r\ntere\r\ntere$/.test(msg)).to.be.true;
+            });
+
             it('should encode 7bit text', function() {
                 var msg = new Mailbuild('text/plain').
                 setContent('tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere tere').
@@ -348,7 +356,7 @@
 
             it('should stuff flowed space', function() {
                 var msg = new Mailbuild('text/plain; format=flowed').
-                setContent('tere\r\nFrom\r\n Hello\r\n> abc\r\nabc').
+                setContent('tere\r\nFrom\r\n Hello\r\n> abc\nabc').
                 build();
 
                 expect(/^Content-Type: text\/plain; format=flowed$/m.test(msg)).to.be.true;
