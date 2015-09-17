@@ -20,10 +20,6 @@
 
 	"globals": {
 		"define": true,
-        "mimefuncs" : true,
-        "mimetypes" : true,
-        "punycode" : true,
-        "addressparser" : true,
         "console": true,
 		"describe": true,
 		"it": true,
