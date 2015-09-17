@@ -26,7 +26,7 @@
     } else if (typeof exports === 'object') {
         module.exports = factory(require('mimefuncs'), require('mimetypes'), require('punycode'), require('wo-addressparser'));
     } else {
-        root.mailbuild = factory(mimefuncs, mimetypes, punycode, addressparser);
+        root.mailbuild = factory(root.mimefuncs, root.mimetypes, root.punycode, root.addressparser);
     }
 }(this, function(mimefuncs, mimetypes, punycode, addressparser) {
     'use strict';
