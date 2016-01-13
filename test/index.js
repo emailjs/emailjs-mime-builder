@@ -8,8 +8,8 @@ require.config({
         'emailjs-addressparser': './node_modules/emailjs-addressparser/src/emailjs-addressparser',
         'emailjs-mime-types': './node_modules/emailjs-mime-types/src/emailjs-mime-types',
         'emailjs-mime-codec': './node_modules/emailjs-mime-codec/src/emailjs-mime-codec',
-        'punycode': './node_modules/punycode/punycode.min',
-        'emailjs-stringencoding': './node_modules/emailjs-stringencoding/src/emailjs-stringencoding',
+        'punycode': './node_modules/punycode/punycode',
+        'emailjs-stringencoding': './node_modules/emailjs-mime-codec/node_modules/emailjs-stringencoding/src/emailjs-stringencoding',
         'sinon': './node_modules/sinon/pkg/sinon',
     },
     shim: {

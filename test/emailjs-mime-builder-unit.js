@@ -287,13 +287,13 @@
                 expect(/^Subject: =\?UTF-8\?Q\?j=C3=B5geval\?= istus =\?UTF-8\?Q\?k=C3=A4gu\?= metsas$/m.test(msg)).to.be.true;
             });
 
-            it.skip('should have unicode subject with strange characters', function() {
+            it('should have unicode subject with strange characters', function() {
                 var msg = new Mimebuilder('text/plain').
                 setHeader({
                     subject: 'ˆ¸ÁÌÓıÏˇÁÛ^¸\\ÁıˆÌÁÛØ^\\˜Û˝™ˇıÓ¸^\\˜ﬁ^\\·\\˜Ø^£˜#ﬁ^\\£ﬁ^\\£ﬁ^\\'
                 }).build();
 
-                expect(msg.match(/\bSubject: [^\r]*\r\n( [^\r]*\r\n)*/)[0]).to.equal('Subject: =?UTF-8?Q?=CB=86=C2=B8=C3=81=C3=8C=C3=93=C4=B1?=\r\n =?UTF-8?Q?=C3=8F=CB=87=C3=81=C3=9B^=C2=B8\\=C3=81?=\r\n =?UTF-8?Q?=C4=B1=CB=86=C3=8C=C3=81=C3=9B=C3=98^\\?=\r\n =?UTF-8?Q?=CB=9C=C3=9B=CB=9D=E2=84=A2=CB=87=C4=B1?=\r\n =?UTF-8?Q?=C3=93=C2=B8^\\=CB=9C=EF=AC=81^\\=C2=B7\\?=\r\n =?UTF-8?Q?=CB=9C=C3=98^=C2=A3=CB=9C#=EF=AC=81^\\?=\r\n =?UTF-8?Q?=C2=A3=EF=AC=81^\\=C2=A3=EF=AC=81^\\?=\r\n');
+                expect(msg.match(/\bSubject: [^\r]*\r\n( [^\r]*\r\n)*/)[0]).to.equal('Subject: =?UTF-8?Q?=CB=86=C2=B8=C3=81=C3=8C=C3=93=C4=B1?=\r\n =?UTF-8?Q?=C3=8F=CB=87=C3=81=C3=9B=5E=C2=B8=5C?=\r\n =?UTF-8?Q?=C3=81=C4=B1=CB=86=C3=8C=C3=81=C3=9B?=\r\n =?UTF-8?Q?=C3=98=5E=5C=CB=9C=C3=9B=CB=9D=E2=84=A2?=\r\n =?UTF-8?Q?=CB=87=C4=B1=C3=93=C2=B8=5E=5C=CB=9C?=\r\n =?UTF-8?Q?=EF=AC=81=5E=5C=C2=B7=5C=CB=9C=C3=98=5E?=\r\n =?UTF-8?Q?=C2=A3=CB=9C=23=EF=AC=81=5E=5C=C2=A3?=\r\n =?UTF-8?Q?=EF=AC=81=5E=5C=C2=A3=EF=AC=81=5E=5C?=\r\n');
             });
 
             it('should setContent (arraybuffer)', function() {
