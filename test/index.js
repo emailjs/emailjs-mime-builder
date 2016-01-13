@@ -5,11 +5,11 @@ require.config({
     paths: {
         'test': './test',
         'chai': './node_modules/chai/chai',
-        'addressparser': './node_modules/wo-addressparser/src/addressparser',
-        'mimetypes': './node_modules/mimetypes/src/mimetypes',
-        'mimefuncs': './node_modules/mimefuncs/src/mimefuncs',
+        'emailjs-addressparser': './node_modules/emailjs-addressparser/src/emailjs-addressparser',
+        'emailjs-mime-types': './node_modules/emailjs-mime-types/src/emailjs-mime-types',
+        'emailjs-mime-codec': './node_modules/emailjs-mime-codec/src/emailjs-mime-codec',
         'punycode': './node_modules/punycode/punycode.min',
-        'stringencoding': './node_modules/mimefuncs/node_modules/wo-stringencoding/dist/stringencoding',
+        'emailjs-stringencoding': './node_modules/emailjs-stringencoding/src/emailjs-stringencoding',
         'sinon': './node_modules/sinon/pkg/sinon',
     },
     shim: {
@@ -21,6 +21,6 @@ require.config({
 
 
 mocha.setup('bdd');
-require(['test/mailbuild-unit'], function() {
+require(['test/emailjs-mime-builder-unit'], function() {
     (window.mochaPhantomJS || window.mocha).run();
 });

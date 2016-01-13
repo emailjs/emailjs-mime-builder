@@ -22,13 +22,13 @@
     'use strict';
 
     if (typeof define === 'function' && define.amd) {
-        define(['mimefuncs', 'mimetypes', 'punycode', 'addressparser'], factory);
+        define(['emailjs-mime-codec', 'emailjs-mime-types', 'punycode', 'emailjs-addressparser'], factory);
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('mimefuncs'), require('mimetypes'), require('punycode'), require('wo-addressparser'));
+        module.exports = factory(require('emailjs-mime-codec'), require('emailjs-mime-types'), require('punycode'), require('emailjs-addressparser'));
     } else {
-        root.mailbuild = factory(root.mimefuncs, root.mimetypes, root.punycode, root.addressparser);
+        root['emailjs-mime-builder'] = factory(root['emailjs-mime-codec'], root['emailjs-mime-types'], root.punycode, root['emailjs-addressparser']);
     }
-}(this, function(mimefuncs, mimetypes, punycode, addressparser) {
+}(this, function(mimecodec, mimetypes, punycode, addressparser) {
     'use strict';
 
     /**
@@ -372,14 +372,14 @@
 
             switch (header.key) {
                 case 'Content-Disposition':
-                    structured = mimefuncs.parseHeaderValue(value);
+                    structured = mimecodec.parseHeaderValue(value);
                     if (this.filename) {
                         structured.params.filename = this.filename;
                     }
                     value = this._buildHeaderValue(structured);
                     break;
                 case 'Content-Type':
-                    structured = mimefuncs.parseHeaderValue(value);
+                    structured = mimecodec.parseHeaderValue(value);
 
                     this._handleContentType(structured);
 
@@ -407,7 +407,7 @@
                 return;
             }
 
-            lines.push(mimefuncs.foldLines(key + ': ' + value, 76));
+            lines.push(mimecodec.foldLines(key + ': ' + value, 76));
         }.bind(this));
 
         // Ensure mandatory header fields
@@ -440,14 +440,14 @@
 
             switch (transferEncoding) {
                 case 'quoted-printable':
-                    lines.push(mimefuncs.quotedPrintableEncode(this.content));
+                    lines.push(mimecodec.quotedPrintableEncode(this.content));
                     break;
                 case 'base64':
-                    lines.push(mimefuncs.base64Encode(this.content, typeof this.content === 'object' && 'binary' || false));
+                    lines.push(mimecodec.base64Encode(this.content, typeof this.content === 'object' && 'binary' || false));
                     break;
                 default:
                     if (flowed) {
-                        lines.push(mimefuncs.foldLines(this.content.replace(/\r?\n/g, '\r\n').
+                        lines.push(mimecodec.foldLines(this.content.replace(/\r?\n/g, '\r\n').
                             // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
                             replace(/^( |From|>)/igm, ' $1'),
                             76, true));
@@ -544,7 +544,7 @@
         Object.keys(structured.params || {}).forEach(function(param) {
             // filename might include unicode characters so it is a special case
             if (param === 'filename') {
-                mimefuncs.continuationEncode(param, structured.params[param], 50).forEach(function(encodedParam) {
+                mimecodec.continuationEncode(param, structured.params[param], 50).forEach(function(encodedParam) {
                     // continuation encoded strings are always escaped, so no need to use enclosing quotes
                     // in fact using quotes might end up with invalid filenames in some clients
                     paramsArray.push(encodedParam.key + '=' + encodedParam.value);
@@ -654,7 +654,7 @@
             default:
                 value = (value || '').toString().replace(/\r?\n|\r/g, ' ');
                 // mimeWordsEncode only encodes if needed, otherwise the original string is returned
-                return mimefuncs.mimeWordsEncode(value, 'Q', 52);
+                return mimecodec.mimeWordsEncode(value, 'Q', 52);
         }
     };
 
@@ -673,7 +673,7 @@
         [].concat(addresses || []).forEach(function(address) {
             if (address.address) {
                 address.address = address.address.replace(/^.*?(?=\@)/, function(user) {
-                    return mimefuncs.mimeWordsEncode(user, 'Q', 52);
+                    return mimecodec.mimeWordsEncode(user, 'Q', 52);
                 }).replace(/@.+$/, function(domain) {
                     return '@' + punycode.toASCII(domain.substr(1));
                 });
@@ -706,7 +706,7 @@
             if (/^[\x20-\x7e]*$/.test(name)) {
                 return '"' + name.replace(/([\\"])/g, '\\$1') + '"';
             } else {
-                return mimefuncs.mimeWordEncode(name, 'Q', 52);
+                return mimecodec.mimeWordEncode(name, 'Q', 52);
             }
         }
         return name;
