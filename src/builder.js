@@ -26,6 +26,7 @@ import {
  * @param {Object} [options.parentNode] immediate parent for this node
  * @param {Object} [options.filename] filename for an attachment node
  * @param {String} [options.baseBoundary] shared part of the unique multipart boundary
+ * @param {String} [options.isEncoded] is the node's content encoded or not
  */
 export default class MimeNode {
   constructor (contentType, options = {}) {
@@ -91,6 +92,11 @@ export default class MimeNode {
      * If true then BCC header is included in RFC2822 message.
      */
     this.includeBccInHeader = options.includeBccInHeader || false
+
+    /**
+     * Is this node's content already encoded
+     */
+    this.isEncoded = options.isEncoded
   }
 
   /**
@@ -400,20 +406,24 @@ export default class MimeNode {
     lines.push('')
 
     if (this.content) {
-      switch (transferEncoding) {
-        case 'quoted-printable':
-          lines.push(quotedPrintableEncode(this.content))
-          break
-        case 'base64':
-          lines.push(base64Encode(this.content, typeof this.content === 'object' ? 'binary' : undefined))
-          break
-        default:
-          if (flowed) {
-            // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
-            lines.push(foldLines(this.content.replace(/\r?\n/g, '\r\n').replace(/^( |From|>)/igm, ' $1'), 76, true))
-          } else {
-            lines.push(this.content.replace(/\r?\n/g, '\r\n'))
-          }
+      if (this.isEncoded) {
+        lines.push(this.content.replace(/\r?\n/g, '\r\n'))
+      } else {
+        switch (transferEncoding) {
+          case 'quoted-printable':
+            lines.push(quotedPrintableEncode(this.content))
+            break
+          case 'base64':
+            lines.push(base64Encode(this.content, typeof this.content === 'object' ? 'binary' : undefined))
+            break
+          default:
+            if (flowed) {
+              // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
+              lines.push(foldLines(this.content.replace(/\r?\n/g, '\r\n').replace(/^( |From|>)/igm, ' $1'), 76, true))
+            } else {
+              lines.push(this.content.replace(/\r?\n/g, '\r\n'))
+            }
+        }
       }
       if (this.multipart) {
         lines.push('')
