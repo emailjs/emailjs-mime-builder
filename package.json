@@ -25,7 +25,8 @@
     "emailjs-addressparser": "^2.0.2",
     "emailjs-mime-codec": "^2.0.3",
     "emailjs-mime-types": "^1.0.0",
-    "punycode": "^2.1.0"
+    "punycode": "^2.1.0",
+    "ramda": "^0.25.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
