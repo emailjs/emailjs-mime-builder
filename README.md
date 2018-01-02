@@ -4,29 +4,21 @@
 
 *emailjs-mime-builder* is a low level rfc2822 message composer. Define your own mime tree, no magic included.
 
-[![Build Status](https://travis-ci.org/emailjs/emailjs-mime-builder.png?branch=master)](https://travis-ci.org/emailjs/emailjs-mime-builder)
+[![Greenkeeper badge](https://badges.greenkeeper.io/emailjs/emailjs-mime-builder.svg)](https://greenkeeper.io/) [![Build Status](https://travis-ci.org/emailjs/emailjs-mime-builder.png?branch=master)](https://travis-ci.org/emailjs/emailjs-mime-builder) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)  [![ES6+](https://camo.githubusercontent.com/567e52200713e0f0c05a5238d91e1d096292b338/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f65732d362b2d627269676874677265656e2e737667)](https://kangax.github.io/compat-table/es6/)
 
-## StringEncoding API
+## Usage
 
-This module requires `TextEncoder` and `TextDecoder` to exist as part of the StringEncoding API (see: [MDN](https://developer.mozilla.org/en-US/docs/WebAPI/Encoding_API) [whatwg.org](http://encoding.spec.whatwg.org/#api)). Firefox 19+ and Chrome M38+ support this. For the others, [there is a polyfill](https://github.com/whiteout-io/stringencoding)!
+Install via
 
-## Installation
+```
+    npm install --save emailjs-mime-builder
+```
 
-### [npm](https://www.npmjs.org/):
+... and then use via
 
-    npm install --save mailbuild
-
-### Dependencies
-
-This module has dependencies that will be fetched automatically.
-
-* [emailjs-mime-codec](https://github.com/emailjs/emailjs-mime-codec/)
-* [emailjs-mime-types](https://github.com/emailjs/emailjs-mime-types/)
-* [emailjs-addressparser](https://github.com/emailjs/emailjs-addressparser/)
-* [punycode.js](https://github.com/bestiejs/punycode.js)
-* [emailjs-stringencoding](https://github.com/emailjs/emailjs-stringencoding)
-
-## API
+```javascript
+import Mimebuilder from 'emailjs-mime-builder'
+```
 
 Create a new `MimeBuilder` object with
 

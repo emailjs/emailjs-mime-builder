@@ -1,6 +1,6 @@
 {
   "name": "emailjs-mime-builder",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "homepage": "https://github.com/emailjs/emailjs-mime-builder",
   "description": "emailjs-mime-builder is a low level rfc2822 message composer. Define your own mime tree, no magic included.",
   "author": "Andris Reinman <andris@kreata.ee>",
@@ -10,30 +10,45 @@
   ],
   "license": "MIT",
   "scripts": {
-    "test": "grunt"
+    "build": "./scripts/build.sh",
+    "release": "./scripts/release.sh",
+    "lint": "$(npm bin)/standard",
+    "test": "npm run lint && npm run unit",
+    "unit": "$(npm bin)/mocha './src/*-unit.js' --reporter spec --require babel-register testutils.js"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/emailjs/emailjs-mime-builder.git"
   },
-  "main": "src/emailjs-mime-builder",
+  "main": "dist/builder",
   "dependencies": {
-    "emailjs-addressparser": "^1.0.1",
-    "emailjs-mime-codec": "^1.0.1",
+    "emailjs-addressparser": "^2.0.2",
+    "emailjs-mime-codec": "^2.0.3",
     "emailjs-mime-types": "^1.0.0",
-    "punycode": "^2.1.0"
+    "punycode": "^2.1.0",
+    "ramda": "^0.25.0"
   },
   "devDependencies": {
-    "amdefine": "^1.0.0",
-    "chai": "^4.1.1",
-    "grunt": "^1.0.1",
-    "grunt-contrib-connect": "^1.0.2",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-mocha-phantomjs": "^4.0.0",
-    "grunt-mocha-test": "^0.13.2",
-    "mocha": "^3.5.0",
-    "phantomjs": "^2.1.7",
-    "requirejs": "^2.1.22",
-    "sinon": "^3.1.0"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "pre-commit": "^1.2.2",
+    "standard": "^10.0.3"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "before",
+      "beforeAll",
+      "afterAll",
+      "after",
+      "expect"
+    ],
+    "ignore": [
+      "dist"
+    ]
   }
 }
