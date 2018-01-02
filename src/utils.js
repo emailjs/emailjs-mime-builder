@@ -21,7 +21,7 @@ function encodeAddressName (name) {
     if (/^[\x20-\x7e]*$/.test(name)) {
       return '"' + name.replace(/([\\"])/g, '\\$1') + '"'
     } else {
-      return mimeWordEncode(name, 'Q', 52)
+      return mimeWordEncode(name, 'Q')
     }
   }
   return name
@@ -52,7 +52,7 @@ export function convertAddresses (addresses = [], uniqueList = []) {
   ;[].concat(addresses).forEach(address => {
     if (address.address) {
       address.address = address.address
-        .replace(/^.*?(?=@)/, user => mimeWordsEncode(user, 'Q', 52))
+        .replace(/^.*?(?=@)/, user => mimeWordsEncode(user, 'Q'))
         .replace(/@.+$/, domain => '@' + toASCII(domain.substr(1)))
 
       if (!address.name) {

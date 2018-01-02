@@ -398,7 +398,7 @@ export default class MimeNode {
           lines.push(quotedPrintableEncode(this.content))
           break
         case 'base64':
-          lines.push(base64Encode(this.content, (typeof this.content === 'object' && 'binary') || false))
+          lines.push(base64Encode(this.content, typeof this.content === 'object' ? 'binary' : undefined))
           break
         default:
           if (flowed) {
