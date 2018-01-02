@@ -1,5 +1,7 @@
 # emailjs-mime-builder
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/emailjs/emailjs-mime-builder.svg)](https://greenkeeper.io/)
+
 *emailjs-mime-builder* is a low level rfc2822 message composer. Define your own mime tree, no magic included.
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/emailjs/emailjs-mime-builder.svg)](https://greenkeeper.io/) [![Build Status](https://travis-ci.org/emailjs/emailjs-mime-builder.png?branch=master)](https://travis-ci.org/emailjs/emailjs-mime-builder) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)  [![ES6+](https://camo.githubusercontent.com/567e52200713e0f0c05a5238d91e1d096292b338/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f65732d362b2d627269676874677265656e2e737667)](https://kangax.github.io/compat-table/es6/)
