@@ -45,8 +45,6 @@ export function isPlainText (value) {
  * @return {String} address string
  */
 export function convertAddresses (addresses = [], uniqueList = []) {
-  // console.log(addresses)
-  // console.log(uniqueList)
   var values = []
 
   ;[].concat(addresses).forEach(address => {
@@ -139,9 +137,7 @@ export function encodeHeaderValue (key, value = '') {
       return value.join(' ').trim()
 
     default:
-      value = (value || '').toString().replace(/\r?\n|\r/g, ' ')
-      // mimeWordsEncode only encodes if needed, otherwise the original string is returned
-      return mimeWordsEncode(value, 'Q')
+      return mimeWordsEncode((value || '').toString().replace(/\r?\n|\r/g, ' '), 'B')
   }
 }
 

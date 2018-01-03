@@ -132,7 +132,7 @@ describe('encodeHeaderValue', function () {
   })
 
   it('should encode non ascii characters', function () {
-    expect(encodeHeaderValue('x-my', 'test jõgeva value')).to.equal('test =?UTF-8?Q?j=C3=B5geva?= value')
+    expect(encodeHeaderValue('x-my', 'test jõgeva value')).to.equal('test =?UTF-8?B?asO1Z2V2YQ==?= value')
   })
 
   it('should format references', function () {
