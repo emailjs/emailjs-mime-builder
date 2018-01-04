@@ -42,8 +42,8 @@
       "describe",
       "it",
       "before",
-      "beforeAll",
-      "afterAll",
+      "beforeEach",
+      "afterEach",
       "after",
       "expect"
     ],
