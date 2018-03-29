@@ -86,6 +86,11 @@ export default class MimeNode {
     if (contentType) {
       this.setHeader('content-type', contentType)
     }
+
+    /**
+     * If true then BCC header is included in RFC2822 message.
+     */
+    this.includeBccInHeader = options.includeBccInHeader || false
   }
 
   /**
@@ -353,8 +358,10 @@ export default class MimeNode {
           value = buildHeaderValue(structured)
           break
         case 'Bcc':
-          // skip BCC values
-          return
+          if (this.includeBccInHeader === false) {
+            // skip BCC values
+            return
+          }
       }
 
       // skip empty lines
