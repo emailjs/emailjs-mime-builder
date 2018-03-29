@@ -247,7 +247,7 @@ describe('Mimebuilder', function () {
       expect(msg).to.equal(expected)
     })
 
-    it('should not inclide bcc missing in output, but in envelope', function () {
+    it('should not include bcc in output, but in envelope', function () {
       const mb = new Mimebuilder('text/plain')
         .setHeader({
           from: 'sender@example.com',
@@ -265,6 +265,26 @@ describe('Mimebuilder', function () {
       expect(/^From: sender@example.com$/m.test(msg)).to.be.true
       expect(/^To: receiver@example.com$/m.test(msg)).to.be.true
       expect(!/^Bcc:/m.test(msg)).to.be.true
+    })
+
+    it('should include bcc in output, and in envelope', function () {
+      const mb = new Mimebuilder('text/plain', {includeBccInHeader: true})
+        .setHeader({
+          from: 'sender@example.com',
+          to: 'receiver@example.com',
+          bcc: 'bcc@example.com'
+        })
+      const msg = mb.build()
+      const envelope = mb.getEnvelope()
+
+      expect(envelope).to.deep.equal({
+        from: 'sender@example.com',
+        to: ['receiver@example.com', 'bcc@example.com']
+      })
+
+      expect(/^From: sender@example.com$/m.test(msg)).to.be.true
+      expect(/^To: receiver@example.com$/m.test(msg)).to.be.true
+      expect(/^Bcc: bcc@example.com$/m.test(msg)).to.be.true
     })
 
     it('should have unicode subject', function () {
