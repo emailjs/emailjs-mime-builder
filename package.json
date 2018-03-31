@@ -1,6 +1,6 @@
 {
   "name": "emailjs-mime-builder",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "homepage": "https://github.com/emailjs/emailjs-mime-builder",
   "description": "emailjs-mime-builder is a low level rfc2822 message composer. Define your own mime tree, no magic included.",
   "author": "Andris Reinman <andris@kreata.ee>",
