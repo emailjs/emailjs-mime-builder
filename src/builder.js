@@ -409,10 +409,8 @@ export default class MimeNode {
           break
         default:
           if (flowed) {
-            lines.push(foldLines(this.content.replace(/\r?\n/g, '\r\n')
-              // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
-              .replace(/^( |From|>)/igm, ' $1'),
-              76, true))
+            // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
+            lines.push(foldLines(this.content.replace(/\r?\n/g, '\r\n').replace(/^( |From|>)/igm, ' $1'), 76, true))
           } else {
             lines.push(this.content.replace(/\r?\n/g, '\r\n'))
           }
