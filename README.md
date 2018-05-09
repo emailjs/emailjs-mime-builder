@@ -17,7 +17,7 @@ Install via
 ... and then use via
 
 ```javascript
-import Mimebuilder from 'emailjs-mime-builder'
+import MimeBuilder from 'emailjs-mime-builder'
 ```
 
 Create a new `MimeBuilder` object with
