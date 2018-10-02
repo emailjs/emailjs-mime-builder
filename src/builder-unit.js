@@ -403,6 +403,12 @@ describe('Mimebuilder', function () {
       expect(/^Content-Disposition: attachment; filename\*0\*=utf-8''j%C3%B5geva.txt$/m.test(msg)).to.be.true
     })
 
+    it('should set filename with a smiley without throwing URIError: URI malformed', function () {
+      expect(() => new Mimebuilder('text/plain', {
+        filename: 'Emoji-😊.png'
+      }).build()).to.not.throw()
+    })
+
     it('should detect content type from filename', function () {
       const msg = new Mimebuilder(false, {
         filename: 'jogeva.zip'
