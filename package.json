@@ -26,7 +26,7 @@
     "emailjs-mime-codec": "^2.0.8",
     "emailjs-mime-types": "^2.0.0",
     "punycode": "1.4.1",
-    "ramda": "^0.25.0"
+    "ramda": "^0.26.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
