@@ -268,7 +268,7 @@ describe('Mimebuilder', function () {
     })
 
     it('should include bcc in output, and in envelope', function () {
-      const mb = new Mimebuilder('text/plain', {includeBccInHeader: true})
+      const mb = new Mimebuilder('text/plain', { includeBccInHeader: true })
         .setHeader({
           from: 'sender@example.com',
           to: 'receiver@example.com',
