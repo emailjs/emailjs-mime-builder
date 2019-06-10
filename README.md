@@ -1,5 +1,14 @@
 # emailjs-mime-builder
 
+## DEPRECATION NOTICE
+
+This project is not actively being maintained. If you're sending emails on a node.js-esque platform, please use Andris Reinman's [nodemailer](https://github.com/nodemailer/nodemailer). It is actively supported, more widely used and maintained offers more possibilities for sending mails than this project.
+
+Background: This project was created because there was no option of using SMTP in a browser environment. This use case has been eliminated since Chrome Apps reached end of life and Firefox OS was scrapped. If you're on an electron-based platform, please use the capabilities that come with a full fledged node.js backend.
+
+If you still feel this project has merit and you would like to be a maintainer, please reach out to me.
+
+
 [![Greenkeeper badge](https://badges.greenkeeper.io/emailjs/emailjs-mime-builder.svg)](https://greenkeeper.io/)
 
 *emailjs-mime-builder* is a low level rfc2822 message composer. Define your own mime tree, no magic included.
