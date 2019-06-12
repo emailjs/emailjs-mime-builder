@@ -507,6 +507,23 @@ describe('Mimebuilder', function () {
       expect(mb.build()).to.equal(expected)
     })
 
+    it('should not encode if isEncoded is true', function () {
+      const mb = new Mimebuilder('multipart/mixed')
+        .createChild('image/jpeg', {
+          filename: 'encoded.jpg',
+          isEncoded: true
+        })
+        .setContent('this should not change')
+      const expected =
+            'Content-Type: image/jpeg\r\n' +
+            'Content-Transfer-Encoding: base64\r\n' +
+            'Content-Disposition: attachment; filename=encoded.jpg\r\n' +
+            '\r\n' +
+            'this should not change'
+
+      expect(mb.build()).to.equal(expected)
+    })
+
     it('should use from domain for message-id', function () {
       const mb = new Mimebuilder('text/plain')
         .setHeader({
