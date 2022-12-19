@@ -24,7 +24,7 @@
     "registry":"https://forge.bluemind.net/nexus/repository/bm-npm/"
   },
   "main": "dist/builder",
-  "type": "src/builder.d.ts",
+  "types": "src/builder.d.ts",
   "dependencies": {
     "emailjs-addressparser": "^2.0.2",
     "emailjs-mime-codec": "^2.0.8",
