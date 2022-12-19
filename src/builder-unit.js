@@ -179,7 +179,6 @@ describe('Mimebuilder', function () {
         'Date: 12345\r\n' +
         'Message-Id: <67890>\r\n' +
         'Content-Transfer-Encoding: 7bit\r\n' +
-        'MIME-Version: 1.0\r\n' +
         '\r\n' +
         'Hello world!'
 
@@ -208,29 +207,20 @@ describe('Mimebuilder', function () {
           'message-id': '67890'
         })
 
-      const expected = 'Content-Type: multipart/mixed; boundary="----sinikael-?=_1-test"\r\n' +
+      const expected = 'Content-Type: multipart/mixed; boundary="---=1-test"\r\n' +
         'Date: 12345\r\n' +
         'Message-Id: <67890>\r\n' +
-        'MIME-Version: 1.0\r\n' +
         '\r\n' +
-        '------sinikael-?=_1-test\r\n' +
+        '-----=1-test\r\n' +
         'Content-Type: text/plain\r\n' +
         'Content-Transfer-Encoding: 7bit\r\n' +
         '\r\n' +
         'Hello world!\r\n' +
-        '------sinikael-?=_1-test--\r\n'
+        '-----=1-test--\r\n'
 
       mb.createChild('text/plain').setContent('Hello world!')
 
       expect(mb.build()).to.equal(expected)
-    })
-
-    it('should build root with generated headers', function () {
-      const msg = new Mimebuilder('text/plain').build()
-
-      expect(/^Date:\s/m.test(msg)).to.be.true
-      expect(/^Message-Id:\s</m.test(msg)).to.be.true
-      expect(/^MIME-Version: 1.0$/m.test(msg)).to.be.true
     })
 
     it('should set content transfer encoding with string', function () {
@@ -459,7 +449,6 @@ describe('Mimebuilder', function () {
         'Date: zzz\r\n' +
         'Message-Id: <67890>\r\n' +
         'Content-Transfer-Encoding: 7bit\r\n' +
-        'MIME-Version: 1.0\r\n' +
         '\r\n' +
         'Hello world!'
 
@@ -478,7 +467,6 @@ describe('Mimebuilder', function () {
           'Date: 12345\r\n' +
           'Message-Id: <67890>\r\n' +
           'Content-Transfer-Encoding: base64\r\n' +
-          'MIME-Version: 1.0\r\n' +
           '\r\n' +
           'SGVsbG8gd29ybGQh'
 
@@ -495,7 +483,6 @@ describe('Mimebuilder', function () {
       const expected = 'Content-Type: multipart/global; boundary=abc\r\n' +
           'Date: 12345\r\n' +
           'Message-Id: <67890>\r\n' +
-          'MIME-Version: 1.0\r\n' +
           '\r\n' +
           'Hello world!\r\n' +
           '\r\n' +
@@ -505,21 +492,6 @@ describe('Mimebuilder', function () {
       mb.boundary = 'abc'
 
       expect(mb.build()).to.equal(expected)
-    })
-
-    it('should use from domain for message-id', function () {
-      const mb = new Mimebuilder('text/plain')
-        .setHeader({
-          from: 'test@example.com'
-        })
-
-      expect(/^Message-Id: <\d+(-[a-f0-9]{8}){3}@example\.com>$/m.test(mb.build())).to.be.true
-    })
-
-    it('should fallback to localhost for message-id', function () {
-      const mb = new Mimebuilder('text/plain')
-
-      expect(/^Message-Id: <\d+(-[a-f0-9]{8}){3}@localhost>$/m.test(mb.build())).to.be.true
     })
   })
 

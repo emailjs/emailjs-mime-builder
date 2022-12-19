@@ -159,7 +159,7 @@ export function normalizeHeaderKey (key = '') {
  * @return {String} boundary value
  */
 export function generateBoundary (nodeId, baseBoundary) {
-  return '----sinikael-?=_' + nodeId + '-' + baseBoundary
+  return '---=' + nodeId + '-' + baseBoundary
 }
 
 /**
