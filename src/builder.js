@@ -399,12 +399,12 @@ export default class MimeNode {
                   }
               }
         }
-      if (this.multipart) {
+      if (this.multipart && this._childNodes.length > 0) {
         lines.push('')
       }
     }
 
-    if (this.multipart) {
+    if (this.multipart && this._childNodes.length > 0) {
       this._childNodes.forEach(node => {
         lines.push('--' + this.boundary)
         lines.push(node.build())
