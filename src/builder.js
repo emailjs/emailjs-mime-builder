@@ -44,7 +44,7 @@ export default class MimeNode {
     /**
      * Allow consumer to prevent library to re-encode content if it's already encoded
      */
-    this.isEncoded = options.isEncoded || false;
+    this.isEncoded = options.isEncoded || false
 
     /**
      * Root node for current mime tree
@@ -380,25 +380,25 @@ export default class MimeNode {
     lines.push('')
 
     if (this.content) {
-        if (this.isEncoded) { 
-            lines.push(this.content.replace(/\r?\n/g, "\r\n"));
-        } else {
-            switch (transferEncoding) {
-                case 'quoted-printable':
-                  lines.push(quotedPrintableEncode(this.content))
-                  break
-                case 'base64':
-                  lines.push(base64Encode(this.content, typeof this.content === 'object' ? 'binary' : undefined))
-                  break
-                default:
-                  if (flowed) {
-                    // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
-                    lines.push(foldLines(this.content.replace(/\r?\n/g, '\r\n').replace(/^( |From|>)/igm, ' $1'), 76, true))
-                  } else {
-                    lines.push(this.content.replace(/\r?\n/g, '\r\n'))
-                  }
-              }
+      if (this.isEncoded) {
+        lines.push(this.content.replace(/\r?\n/g, '\r\n'))
+      } else {
+        switch (transferEncoding) {
+          case 'quoted-printable':
+            lines.push(quotedPrintableEncode(this.content))
+            break
+          case 'base64':
+            lines.push(base64Encode(this.content, typeof this.content === 'object' ? 'binary' : undefined))
+            break
+          default:
+            if (flowed) {
+              // space stuffing http://tools.ietf.org/html/rfc3676#section-4.2
+              lines.push(foldLines(this.content.replace(/\r?\n/g, '\r\n').replace(/^( |From|>)/igm, ' $1'), 76, true))
+            } else {
+              lines.push(this.content.replace(/\r?\n/g, '\r\n'))
+            }
         }
+      }
       if (this.multipart && this._childNodes.length > 0) {
         lines.push('')
       }
