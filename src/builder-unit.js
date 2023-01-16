@@ -479,13 +479,12 @@ describe('Mimebuilder', function () {
           date: '12345',
           'message-id': '67890'
         })
-        .setContent('Hello world!')
+        .setContent('Hello world!\r\n--abc--\r\n')
       const expected = 'Content-Type: multipart/global; boundary=abc\r\n' +
           'Date: 12345\r\n' +
           'Message-Id: <67890>\r\n' +
           '\r\n' +
           'Hello world!\r\n' +
-          '\r\n' +
           '--abc--' +
           '\r\n'
 
